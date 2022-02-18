@@ -1,5 +1,13 @@
 package com.periculum.flutter_periculum.models.requests
 
+data class AffordabilityPayload(
+    var dti: Double,
+    var statementKey: Int,
+    var loanTenure: Int,
+    var averageMonthlyTotalExpenses: Int?,
+    var averageMonthlyLoanRepaymentAmount: Int?
+)
+
 data class Customer(
     val phoneNumber: String,
     val bvn: String?,

@@ -2,17 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_periculum/models/AffordabilityResponse.dart';
-import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
 
-  static Future<String> mobileDataAnalysis(
-      {required String token,
-      required String phoneNumber,
-      required String bvn,
-      String? statementName}) async {
+  static Future<String> mobileDataAnalysis({
+    required String token,
+    String? phoneNumber,
+    String? bvn,
+    String? statementName,
+  }) async {
     Map<String, dynamic> myresponse;
 
     final String response =
@@ -26,10 +25,7 @@ class FlutterPericulum {
     var result = jsonDecode(response);
 
     if (result["status"] == null) {
-      myresponse = {
-        "status": true,
-        "data": response
-      };
+      myresponse = {"status": true, "data": response};
     } else {
       myresponse = {
         "status": false,
@@ -45,6 +41,8 @@ class FlutterPericulum {
     required double dti,
     required int statementKey,
     required int loanTenure,
+    int? averageMonthlyTotalExpenses,
+    int? averageMonthlyLoanRepaymentAmount,
   }) async {
     Map<String, dynamic> myresponse;
     String response =
@@ -52,16 +50,15 @@ class FlutterPericulum {
       'token': token,
       'dti': dti,
       'statementKey': statementKey,
-      'loanTenure': loanTenure
+      'loanTenure': loanTenure,
+      'averageMonthlyTotalExpenses': averageMonthlyTotalExpenses,
+      'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
     });
 
     var result = jsonDecode(response);
 
     if (result["status"] == null) {
-      myresponse = {
-        "status": true,
-        "data": response
-      };
+      myresponse = {"status": true, "data": response};
     } else {
       myresponse = {
         "status": false,

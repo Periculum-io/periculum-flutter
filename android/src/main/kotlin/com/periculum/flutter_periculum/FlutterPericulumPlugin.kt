@@ -80,20 +80,35 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 val dti = args.get("dti")
                 val statementKey = args.get("statementKey")
                 val loanTenure = args.get("loanTenure")
+                val averageMonthlyTotalExpenses = args.get("averageMonthlyTotalExpenses")
+                val averageMonthlyLoanRepaymentAmount =
+                    args.get("averageMonthlyLoanRepaymentAmount")
+
+                val gson = Gson()
+
+                var payload: AffordabilityPayload = AffordabilityPayload(
+                    dti = dti as Double,
+                    statementKey = statementKey as Int,
+                    loanTenure = loanTenure as Int,
+                    averageMonthlyTotalExpenses = averageMonthlyLoanRepaymentAmount as Int?,
+                    averageMonthlyLoanRepaymentAmount = averageMonthlyLoanRepaymentAmount as Int?,
+                )
 
                 val endpoint = "affordability"
 
                 val url = "$BASE_URL$endpoint"
 
                 val JSON = "application/json; charset=utf-8".toMediaType()
-                //Log.d("URL", url)
+                Log.d("Payload", payload.toString())
+
+
 
                 //The data I want to send
-                val JSONObjectString =
-                    "{\"dti\": $dti,\"statementKey\": $statementKey,\"loanTenure\": $loanTenure}"
+                val JSONObjectString: String = gson.toJson(payload)
+                //val JSONObjectString = "{\"dti\": $dti,\"statementKey\": $statementKey,\"loanTenure\": $loanTenure}"
 
 
-                //Log.d("PARAMETERS", JSONObjectString)
+                Log.d("PARAMETERS", JSONObjectString)
 
                 var body: RequestBody = RequestBody.create(JSON, JSONObjectString)
                 val request = Request.Builder()
@@ -137,113 +152,113 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 if (pCheck.await()) {
 
-                checkPermissions();
+                    checkPermissions();
 
-                val args = call.arguments as? HashMap<String, String>
-                var statementName: String = ""
-                var phoneNumber: String = ""
-                var bvn: String = ""
-                var token: String = ""
+                    val args = call.arguments as? HashMap<String, String>
+                    var statementName: String = ""
+                    var phoneNumber: String = ""
+                    var bvn: String = ""
+                    var token: String = ""
 
-                if (args != null) {
-                    statementName =
-                        args.getOrElse("statementName") { getStatementName().toString() }
-                    token = args.get("token").toString()
-                    phoneNumber = args.get("phoneNumber").toString()
-                    bvn = args.get("bvn").toString()
+                    if (args != null) {
+                        statementName =
+                            args.getOrElse("statementName") { getStatementName().toString() }
+                        token = args.get("token").toString()
+                        phoneNumber = args.get("phoneNumber").toString()
+                        bvn = args.get("bvn").toString()
 
-                    if (statementName == null || statementName == "null") {
+                        if (statementName == null || statementName == "null") {
+                            statementName = getStatementName().toString()
+                        }
+                    } else {
                         statementName = getStatementName().toString()
                     }
-                } else {
-                    statementName = getStatementName().toString()
-                }
 
-                //Log.d("statementName", statementName)
+                    //Log.d("statementName", statementName)
 
-                var customer = Customer(phoneNumber, bvn)
-                var mymetadata = MetaData(customer)
-                var device = async { getDeviceDetails() }
-                var smses = async { getDebitSMSes() }
+                    var customer = Customer(phoneNumber, bvn)
+                    var mymetadata = MetaData(customer)
+                    var device = async { getDeviceDetails() }
+                    var smses = async { getDebitSMSes() }
 
-                var mydevice = device.await()
-                var mysms = smses.await()
+                    var mydevice = device.await()
+                    var mysms = smses.await()
 
-                fusedLocationProviderClient =
-                    LocationServices.getFusedLocationProviderClient(myplugin.context)
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
-                    var location: Location = locTask.result
+                    fusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(myplugin.context)
+                    fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
+                        var location: Location = locTask.result
 
-                    if (location != null) {
-                        var latitude = locTask.result.latitude
-                        var longitude = locTask.result.longitude
-                        var accuracy = locTask.result.accuracy.toDouble()
-                        var speed = locTask.result.speed.toDouble()
-                        var bearing = locTask.result.bearing.toDouble()
-                        var altitude = locTask.result.altitude
-                        var time = getStatementName()
+                        if (location != null) {
+                            var latitude = locTask.result.latitude
+                            var longitude = locTask.result.longitude
+                            var accuracy = locTask.result.accuracy.toDouble()
+                            var speed = locTask.result.speed.toDouble()
+                            var bearing = locTask.result.bearing.toDouble()
+                            var altitude = locTask.result.altitude
+                            var time = getStatementName()
 
-                        myLocation = LocationDetails(
-                            accuracy,
-                            altitude,
-                            bearing,
-                            latitude,
-                            longitude,
-                            "fused",
-                            speed,
-                            time)
+                            myLocation = LocationDetails(
+                                accuracy,
+                                altitude,
+                                bearing,
+                                latitude,
+                                longitude,
+                                "fused",
+                                speed,
+                                time)
 
-                        val gson = Gson()
+                            val gson = Gson()
 
-                        periculum =
-                            Periculum(statementName,
-                                mydevice,
-                                mysms,
-                                mymetadata,
-                                myLocation)
+                            periculum =
+                                Periculum(statementName,
+                                    mydevice,
+                                    mysms,
+                                    mymetadata,
+                                    myLocation)
 
-                        val jsonInString: String = gson.toJson(periculum)
+                            val jsonInString: String = gson.toJson(periculum)
 
-                        val endpoint = "mobile/analytics"
+                            val endpoint = "mobile/analytics"
 
-                        val url = "$BASE_URL$endpoint"
+                            val url = "$BASE_URL$endpoint"
 
-                        val JSON = "application/json; charset=utf-8".toMediaType()
-                        //Log.d("URL", url)
+                            val JSON = "application/json; charset=utf-8".toMediaType()
+                            //Log.d("URL", url)
 
-                        //Log.d("PAYLOAD", jsonInString)
+                            //Log.d("PAYLOAD", jsonInString)
 
 
-                        var body: RequestBody = RequestBody.create(JSON, jsonInString)
-                        val request = Request.Builder()
-                            .addHeader("Authorization", "Bearer $token")
-                            .post(body)
-                            .url(url)
-                            .build()
-                        val client = OkHttpClient()
-                        client.newCall(request).enqueue(object : Callback {
-                            override fun onResponse(call: Call, response: Response) {
-                                val tm = response.body!!.string()
-                                //val result = JSONObject(tm)
+                            var body: RequestBody = RequestBody.create(JSON, jsonInString)
+                            val request = Request.Builder()
+                                .addHeader("Authorization", "Bearer $token")
+                                .post(body)
+                                .url(url)
+                                .build()
+                            val client = OkHttpClient()
+                            client.newCall(request).enqueue(object : Callback {
+                                override fun onResponse(call: Call, response: Response) {
+                                    val tm = response.body!!.string()
+                                    //val result = JSONObject(tm)
 //                                    Log.d("Success", tm)
 //                                    result.success(hashMapOf(
 //                                        "status" to false,
 //                                        "data" to tm.toString()
 //                                    ).toString())
-                                result.success(tm)
-                            }
+                                    result.success(tm)
+                                }
 
-                            override fun onFailure(call: Call, e: IOException) {
-                                //Log.d("Error", e.message.toString())
-                                val error = e.message;
-                                result.success("{\"title\": \"${error}\"}")
-                            }
-                        })
+                                override fun onFailure(call: Call, e: IOException) {
+                                    //Log.d("Error", e.message.toString())
+                                    val error = e.message;
+                                    result.success("{\"title\": \"${error}\"}")
+                                }
+                            })
 
-                    } else {
-                        result.success("{\"title\": \"Unable to get location details\"}")
+                        } else {
+                            result.success("{\"title\": \"Unable to get location details\"}")
+                        }
                     }
-                }
 
                 } else {
                     result.success("{\"title\": \"Unable to get permission\"}")
