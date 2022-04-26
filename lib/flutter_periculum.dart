@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_periculum/models/ExistingStatment.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -24,7 +25,7 @@ class FlutterPericulum {
 
     var result = jsonDecode(response);
 
-    if (result["status"] == null) {
+    if (result != null) {
       myresponse = {"status": true, "data": response};
     } else {
       myresponse = {
@@ -67,5 +68,65 @@ class FlutterPericulum {
     }
 
     return jsonEncode(myresponse).toString();
+  }
+
+  static Future<String> statementAnalytics({required String token}) async {
+    Map<String, dynamic> myResponse;
+    String response = await _channel.invokeMethod(
+      'getStatementAnalytics',
+      {'token': token},
+    );
+    var result = jsonDecode(response);
+    if (result != null) {
+      myResponse = {"status": true, "data": response};
+    } else {
+      myResponse = {
+        "status": false,
+        "msg": result,
+      };
+    }
+
+    return jsonEncode(myResponse).toString();
+  }
+
+  static Future<String> statementTransaction(
+      {required String token, required String key}) async {
+    Map<String, dynamic> myResponse;
+    String response = await _channel.invokeMethod('getStatementTransaction', {
+      'token': token,
+      'statementKey': key,
+    });
+    var result = jsonDecode(response);
+    if (result != null) {
+      myResponse = {"status": true, "data": response};
+    } else {
+      myResponse = {
+        "status": false,
+        "msg": result,
+      };
+    }
+
+    return jsonEncode(myResponse).toString();
+  }
+
+  static Future<String> statementAffordabilityAnalysis(
+      {required String token, required String key}) async {
+    Map<String, dynamic> myResponse;
+    String response =
+        await _channel.invokeMethod('getStatementAffordabilityAnalysis', {
+      'token': token,
+      'statementKey': key,
+    });
+    var result = jsonDecode(response);
+    if (result != null) {
+      myResponse = {"status": true, "data": response};
+    } else {
+      myResponse = {
+        "status": false,
+        "msg": result,
+      };
+    }
+
+    return jsonEncode(myResponse).toString();
   }
 }
