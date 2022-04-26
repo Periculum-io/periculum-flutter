@@ -70,7 +70,7 @@ class FlutterPericulum {
     return jsonEncode(myresponse).toString();
   }
 
-  static Future<String> statementAnalytics({required String token}) async {
+  static Future<dynamic> statementAnalytics({required String token}) async {
     Map<String, dynamic> myResponse;
     String response = await _channel.invokeMethod(
       'getStatementAnalytics',
@@ -85,11 +85,11 @@ class FlutterPericulum {
         "msg": result,
       };
     }
-
-    return jsonEncode(myResponse).toString();
+    //return an object of {"status": true, "data": (response)}
+    return myResponse;
   }
 
-  static Future<String> statementTransaction(
+  static Future<dynamic> statementTransaction(
       {required String token, required String key}) async {
     Map<String, dynamic> myResponse;
     String response = await _channel.invokeMethod('getStatementTransaction', {
@@ -99,6 +99,7 @@ class FlutterPericulum {
     var result = jsonDecode(response);
     if (result != null) {
       myResponse = {"status": true, "data": response};
+      print(myResponse.toString());
     } else {
       myResponse = {
         "status": false,
@@ -106,27 +107,8 @@ class FlutterPericulum {
       };
     }
 
-    return jsonEncode(myResponse).toString();
+    return myResponse;
   }
 
-  static Future<String> statementAffordabilityAnalysis(
-      {required String token, required String key}) async {
-    Map<String, dynamic> myResponse;
-    String response =
-        await _channel.invokeMethod('getStatementAffordabilityAnalysis', {
-      'token': token,
-      'statementKey': key,
-    });
-    var result = jsonDecode(response);
-    if (result != null) {
-      myResponse = {"status": true, "data": response};
-    } else {
-      myResponse = {
-        "status": false,
-        "msg": result,
-      };
-    }
 
-    return jsonEncode(myResponse).toString();
-  }
 }
