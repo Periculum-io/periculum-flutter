@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
 
 class FlutterPericulum {
@@ -37,7 +39,7 @@ class FlutterPericulum {
     return jsonEncode(myresponse).toString();
   }
 
-  static Future<String> affordabilityAnalysis({
+  static Future<AffordabilityResponse> affordabilityAnalysis({
     required String token,
     required double dti,
     required int statementKey,
@@ -45,7 +47,9 @@ class FlutterPericulum {
     int? averageMonthlyTotalExpenses,
     int? averageMonthlyLoanRepaymentAmount,
   }) async {
-    Map<String, dynamic> myresponse;
+    Map<String, dynamic> map;
+
+    AffordabilityResponse affordabilityResponse;
     String response =
         await _channel.invokeMethod('generateAffordabilityAnalysis', {
       'token': token,
@@ -56,59 +60,69 @@ class FlutterPericulum {
       'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
     });
 
-    var result = jsonDecode(response);
-
-    if (result["status"] == null) {
-      myresponse = {"status": true, "data": response};
-    } else {
-      myresponse = {
-        "status": false,
-        "msg": result["title"],
-      };
-    }
-
-    return jsonEncode(myresponse).toString();
+    var result = json.decode(response);
+    map = json.decode(response);
+    affordabilityResponse = AffordabilityResponse.fromJson(map);
+    return affordabilityResponse;
   }
 
-  static Future<dynamic> statementAnalytics({required String token}) async {
-    Map<String, dynamic> myResponse;
-    String response = await _channel.invokeMethod(
-      'getStatementAnalytics',
-      {'token': token},
-    );
-    var result = jsonDecode(response);
-    if (result != null) {
-      myResponse = {"status": true, "data": response};
-    } else {
-      myResponse = {
-        "status": false,
-        "msg": result,
-      };
-    }
-    //return an object of {"status": true, "data": (response)}
-    return myResponse;
-  }
-
-  static Future<dynamic> statementTransaction(
-      {required String token, required String key}) async {
-    Map<String, dynamic> myResponse;
-    String response = await _channel.invokeMethod('getStatementTransaction', {
+  static Future<ExisitingStatementResponse> statementAnalytics({
+    required String token,
+    required String statementKey,
+  }) async {
+    Map<String, dynamic> map;
+    String response = await _channel.invokeMethod('getStatementAnalytics', {
       'token': token,
-      'statementKey': key,
+      'statementKey': statementKey,
     });
-    var result = jsonDecode(response);
-    if (result != null) {
-      myResponse = {"status": true, "data": response};
-      print(myResponse.toString());
-    } else {
-      myResponse = {
-        "status": false,
-        "msg": result,
-      };
-    }
 
-    return myResponse;
+    map = json.decode(response);
+    ExisitingStatementResponse exisitingStatementResponse =
+        ExisitingStatementResponse.fromJson(map);
+    debugPrint(exisitingStatementResponse.name);
+    return exisitingStatementResponse;
   }
 
+  // static Future<dynamic> statementTransaction(
+  //     {required String token, required String key}) async {
+  //   Map<String, dynamic> myResponse;
+  //   String response = await _channel.invokeMethod('getStatementTransaction', {
+  //     'token': token,
+  //     'statementKey': key,
+  //   });
+  //   var result = jsonDecode(response);
+  //   if (result != null) {
+  //     myResponse = {"status": true, "data": response};
+  //     print(myResponse.toString());
+  //   } else {
+  //     myResponse = {
+  //       "status": false,
+  //       "msg": result,
+  //     };
+  //   }
+  //
+  //   return myResponse;
+  // }
+  //
+  // static Future<dynamic> getExisitingCreditScore({required String token, required String statementKey,}) async{
+  //   Map<String, dynamic> myResponse;
+  //   String response = await _channel.invokeMethod(
+  //     'getExisitingCreditScore',
+  //     {'token': token,
+  //     'statementKey': statementKey},
+  //   );
+  //   var result = jsonDecode(response);
+  //   if (result != null) {
+  //     myResponse = {"status": true, "data": response};
+  //   } else {
+  //     myResponse = {
+  //       "status": false,
+  //       "msg": result,
+  //     };
+  //   }
+  //   //return an object of {"status": true, "data": (response)}
+  //   return myResponse;
+  //
+  // }
 
 }

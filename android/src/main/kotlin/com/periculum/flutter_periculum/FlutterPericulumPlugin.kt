@@ -106,8 +106,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 //The data I want to send
                 val JSONObjectString: String = gson.toJson(payload)
-                //val JSONObjectString = "{\"dti\": $dti,\"statementKey\": $statementKey,\"loanTenure\": $loanTenure}"
-
 
                 Log.d("PARAMETERS", JSONObjectString)
 
@@ -121,20 +119,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 client.newCall(request).enqueue(object : Callback {
                     override fun onResponse(call: Call, response: Response) {
                         val tm = response.body!!.string()
-                        //val result = JSONObject(tm)
-                        //Log.d("Success", tm)
-//                        result.success(hashMapOf(
-//                            "status" to true,
-//                            "data" to tm
-//                        ).toString())
 
                         result.success(tm)
                     }
 
                     override fun onFailure(call: Call, e: IOException) {
-//                        Log.d("Failed", "FAILED")
-//                        e.printStackTrace()
-                        //Log.println(Log.DEBUG, "debug", "Permission granted");
                         val error = e.message
                         result.success("{\"title\": \"${error}\"}")
                     }
@@ -144,20 +133,23 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
         } else if (call.method == "getStatementAnalytics"){
-            println("getStatementAnalytics..")
             val args = call.arguments as HashMap<String, Any>
             if (args != null){
                 val token = args.get("token")
-                val endpoint = "statement"
+                var key = args.get("statementKey")
+                val endpoint = "/statements/"
+
+                var url = "$BASE_URL$endpoint$key"
+
+
                 val client = OkHttpClient()
                 var request = Request.Builder()
                         .addHeader("Authorization", "Bearer $token")
-                        .url("$BASE_URL/statements/")
+                        .url(url)
                         .build()
                     client.newCall(request).enqueue(object : Callback{
                         override fun onResponse(call: Call, response: Response){
                             val callResponse = response.body!!.string()
-
                             result.success("$callResponse");
                         }
 
@@ -169,8 +161,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             
            }
-       } else if (call.method == "getStatementTransaction"){
-            println("getStatementTransaction..")
+       } else if (call.method == "getStatementTransaction"){ //pending task
             val args = call.arguments as HashMap<String, Any>
             if (args != null){
                 var token = args.get("token")
@@ -179,7 +170,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 val client = OkHttpClient()
                 var request = Request.Builder()
                     .addHeader("Authorization", "Bearer $token")
-                    .url("$BASE_URL$endpoint/$key/transactions/")
+                    .url("$BASE_URL$endpoint/$key/transactions")
                     .build()
                 client.newCall(request).enqueue(object : Callback{
                     override fun onResponse(call: Call, response: Response){
@@ -194,6 +185,32 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     }
                 })
 
+
+            }
+        } else if (call.method == "getExistingCreditScore"){ // Pending task
+            print("getExistingCreditScore..")
+            val args = call.arguments as HashMap<String, Any>
+            if (args != null) {
+                var token = args.get("token")
+                var key = args.get("statementKey")
+                val endpoint = "/creditscore"
+                val client = OkHttpClient()
+                var request = Request.Builder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .url("$BASE_URL$endpoint/$key")
+                    .build()
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onResponse(call: Call, response: Response) {
+                        val callResponse = response.body!!.string()
+
+                        result.success("$callResponse");
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        val error = e.message
+                        result.success("{\"title\": \"${error}\"}")
+                    }
+                })
 
             }
         }else if (call.method == "generateMobileDataAnalysis") {

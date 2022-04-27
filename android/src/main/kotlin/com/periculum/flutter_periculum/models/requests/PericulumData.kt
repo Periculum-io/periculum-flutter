@@ -112,19 +112,3 @@ data class SMS(
     val using_mode: Int = 0,
     val announcements_subtype: Int = 0,
 )
-
-data class Statement (
-    val key: Long,
-    val name: String,
-    val clientFullName: Any? = null,
-    val clientPhoneNumber: Any? = null,
-    val startDate: String,
-    val endDate: String,
-    val createdDate: String,
-    val processingStatus: ProcessingStatus,
-    val confidenceInParsing: Long
-)
-
-enum class ProcessingStatus {
-    Processed
-}

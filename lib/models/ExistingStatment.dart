@@ -1,62 +1,124 @@
 // To parse this JSON data, do
 //
-//     final statement = statementFromJson(jsonString);
+//     final exisitingStatementResponse = exisitingStatementResponseFromJson(jsonString);
 
 import 'dart:convert';
 
-List<Statement> statementFromJson(String str) =>
-    List<Statement>.from(json.decode(str).map((x) => Statement.fromJson(x)));
+import 'BehaviouralAnalysis.dart';
+import 'CashFlowAnalysis.dart';
+import 'ClientIndentification.dart';
+import 'IncomeAnalysis.dart';
+import 'SpendAnalysis.dart';
+import 'TransactionPatternAnalysis.dart';
 
-String statementToJson(List<Statement> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+ExisitingStatementResponse exisitingStatementResponseFromJson(String str) =>
+    ExisitingStatementResponse.fromJson(json.decode(str));
 
-class Statement {
-  Statement({
+String exisitingStatementResponseToJson(ExisitingStatementResponse data) =>
+    json.encode(data.toJson());
+
+class ExisitingStatementResponse {
+  ExisitingStatementResponse({
     required this.key,
     required this.name,
-    this.clientFullName,
-    this.clientPhoneNumber,
+    required this.source,
+    required this.clientFullName,
+    required this.clientPhoneNumber,
+    required this.accountType,
+    required this.accountBalance,
+    required this.accountId,
+    required this.accountName,
+    required this.bankName,
+    required this.statementType,
     required this.startDate,
     required this.endDate,
     required this.createdDate,
     required this.processingStatus,
-    required this.confidenceInParsing,
+    required this.clientIdentification,
+    required this.spendAnalysis,
+    required this.transactionPatternAnalysis,
+    required this.behavioralAnalysis,
+    required this.cashFlowAnalysis,
+    required this.incomeAnalysis,
+    required this.confidenceOnParsing,
   });
 
   int key;
   String name;
+  String source;
   dynamic clientFullName;
   dynamic clientPhoneNumber;
+  dynamic accountType;
+  dynamic accountBalance;
+  dynamic accountId;
+  dynamic accountName;
+  dynamic bankName;
+  String statementType;
   DateTime startDate;
   DateTime endDate;
   DateTime createdDate;
   String processingStatus;
-  int confidenceInParsing;
+  List<ClientIdentification> clientIdentification;
+  SpendAnalysis spendAnalysis;
+  TransactionPatternAnalysis transactionPatternAnalysis;
+  BehavioralAnalysis behavioralAnalysis;
+  CashFlowAnalysis cashFlowAnalysis;
+  IncomeAnalysis incomeAnalysis;
+  int confidenceOnParsing;
 
-  factory Statement.fromJson(Map<String, dynamic> json) => Statement(
+  factory ExisitingStatementResponse.fromJson(Map<String, dynamic> json) =>
+      ExisitingStatementResponse(
         key: json["key"],
         name: json["name"],
+        source: json["source"],
         clientFullName: json["clientFullName"],
         clientPhoneNumber: json["clientPhoneNumber"],
+        accountType: json["accountType"],
+        accountBalance: json["accountBalance"],
+        accountId: json["accountId"],
+        accountName: json["accountName"],
+        bankName: json["bankName"],
+        statementType: json["statementType"],
         startDate: DateTime.parse(json["startDate"]),
         endDate: DateTime.parse(json["endDate"]),
         createdDate: DateTime.parse(json["createdDate"]),
         processingStatus: json["processingStatus"],
-        confidenceInParsing: json["confidenceInParsing"],
+        clientIdentification: List<ClientIdentification>.from(
+            json["clientIdentification"]
+                .map((x) => ClientIdentification.fromJson(x))),
+        spendAnalysis: SpendAnalysis.fromJson(json["spendAnalysis"]),
+        transactionPatternAnalysis: TransactionPatternAnalysis.fromJson(
+            json["transactionPatternAnalysis"]),
+        behavioralAnalysis:
+            BehavioralAnalysis.fromJson(json["behavioralAnalysis"]),
+        cashFlowAnalysis: CashFlowAnalysis.fromJson(json["cashFlowAnalysis"]),
+        incomeAnalysis: IncomeAnalysis.fromJson(json["incomeAnalysis"]),
+        confidenceOnParsing: json["confidenceOnParsing"],
       );
 
   Map<String, dynamic> toJson() => {
         "key": key,
         "name": name,
+        "source": source,
         "clientFullName": clientFullName,
         "clientPhoneNumber": clientPhoneNumber,
-        "startDate":
-            "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
-        "endDate":
-            "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
-        "createdDate":
-            "${createdDate.year.toString().padLeft(4, '0')}-${createdDate.month.toString().padLeft(2, '0')}-${createdDate.day.toString().padLeft(2, '0')}",
+        "accountType": accountType,
+        "accountBalance": accountBalance,
+        "accountId": accountId,
+        "accountName": accountName,
+        "bankName": bankName,
+        "statementType": statementType,
+        "startDate": startDate.toIso8601String(),
+        "endDate": endDate.toIso8601String(),
+        "createdDate": createdDate.toIso8601String(),
         "processingStatus": processingStatus,
-        "confidenceInParsing": confidenceInParsing,
+        "clientIdentification":
+            List<dynamic>.from(clientIdentification.map((x) => x.toJson())),
+        "spendAnalysis": spendAnalysis.toJson(),
+        "transactionPatternAnalysis": transactionPatternAnalysis.toJson(),
+        "behavioralAnalysis": behavioralAnalysis.toJson(),
+        "cashFlowAnalysis": cashFlowAnalysis.toJson(),
+        "incomeAnalysis": incomeAnalysis.toJson(),
+        "confidenceOnParsing": confidenceOnParsing,
       };
 }
