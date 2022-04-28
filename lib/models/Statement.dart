@@ -7,14 +7,12 @@ import 'IncomeAnalysis.dart';
 import 'SpendAnalysis.dart';
 import 'TransactionPatternAnalysis.dart';
 
-StatementResponse statementResponseFromJson(String str) =>
-    StatementResponse.fromJson(json.decode(str));
+Statement statementFromJson(String str) => Statement.fromJson(json.decode(str));
 
-String statementResponseToJson(StatementResponse data) =>
-    json.encode(data.toJson());
+String statementToJson(Statement data) => json.encode(data.toJson());
 
-class StatementResponse {
-  StatementResponse({
+class Statement {
+  Statement({
     required this.key,
     required this.name,
     required this.source,
@@ -62,8 +60,7 @@ class StatementResponse {
   IncomeAnalysis incomeAnalysis;
   int confidenceOnParsing;
 
-  factory StatementResponse.fromJson(Map<String, dynamic> json) =>
-      StatementResponse(
+  factory Statement.fromJson(Map<String, dynamic> json) => Statement(
         key: json["key"],
         name: json["name"],
         source: json["source"],
