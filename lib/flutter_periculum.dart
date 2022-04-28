@@ -82,47 +82,4 @@ class FlutterPericulum {
     debugPrint(exisitingStatementResponse.name);
     return exisitingStatementResponse;
   }
-
-  // static Future<dynamic> statementTransaction(
-  //     {required String token, required String key}) async {
-  //   Map<String, dynamic> myResponse;
-  //   String response = await _channel.invokeMethod('getStatementTransaction', {
-  //     'token': token,
-  //     'statementKey': key,
-  //   });
-  //   var result = jsonDecode(response);
-  //   if (result != null) {
-  //     myResponse = {"status": true, "data": response};
-  //     print(myResponse.toString());
-  //   } else {
-  //     myResponse = {
-  //       "status": false,
-  //       "msg": result,
-  //     };
-  //   }
-  //
-  //   return myResponse;
-  // }
-  //
-  // static Future<dynamic> getExisitingCreditScore({required String token, required String statementKey,}) async{
-  //   Map<String, dynamic> myResponse;
-  //   String response = await _channel.invokeMethod(
-  //     'getExisitingCreditScore',
-  //     {'token': token,
-  //     'statementKey': statementKey},
-  //   );
-  //   var result = jsonDecode(response);
-  //   if (result != null) {
-  //     myResponse = {"status": true, "data": response};
-  //   } else {
-  //     myResponse = {
-  //       "status": false,
-  //       "msg": result,
-  //     };
-  //   }
-  //   //return an object of {"status": true, "data": (response)}
-  //   return myResponse;
-  //
-  // }
-
 }
