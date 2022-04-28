@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
+import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
 
 void main() async {
@@ -27,6 +28,7 @@ class _MyAppState extends State<MyApp> {
   bool isLoading = false;
   bool _response = false;
   // bool _statementResponse = false;
+  late List<ExisitingCreditResponse> creditResponse;
 
   @override
   void initState() {
@@ -174,66 +176,45 @@ class _MyAppState extends State<MyApp> {
                           'Get Exisiting statement analytics',
                         )),
                     Text("Get statement $_response: "),
-                    // TextButton(
-                    //     onPressed: () async {
-                    //       setState(() {
-                    //         isLoading = true;
-                    //       });
-                    //       var response;
-                    //       try {
-                    //         response =
-                    //             await FlutterPericulum.statementTransaction(token:
-                    //             "${dotenv.env['tokenKey']}", key: "120").then((value) => {
-                    //                   setState(() {
-                    //                     isLoading = false;
-                    //                     setState(() {
-                    //                       _statementResponse = true;
-                    //                     });
-                    //                   }),
-                    //                   debugPrint(value.toString()),
-                    //                 });
-                    //       } on PlatformException {
-                    //         setState(() {
-                    //           isLoading = false;
-                    //           _statementResponse = false;
-                    //         });
-                    //       } on Exception catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //         setState(() {
-                    //           _statementResponse = false;
-                    //           isLoading = false;
-                    //         });
-                    //       }
-                    //     },
-                    //     child: const Text(
-                    //       'Get Exisiting statement transaction analytics',
-                    //     )),
-                    // Text("Get statement Transcation: $_statementResponse"), TextButton(
-                    //     onPressed: () async {
-                    //       print('loading..');
-                    //       var response;
-                    //       try {
-                    //         response =
-                    //         await FlutterPericulum.statementTransaction(token:
-                    //         "${dotenv.env['tokenKey']}", key: "125").then((value) => {
-                    //          print('loading completed..'),
-                    //           debugPrint(value.toString()),
-                    //         });
-                    //       } on PlatformException catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //         } on Exception catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //       }
-                    //     },
-                    //     child: const Text(
-                    //       'Get Exisiting credit score',
-                    //     )),
+                    TextButton(
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          var response;
+                          try {
+                            response =
+                                await FlutterPericulum.getExisitingCreditScore(
+                                        token: "${dotenv.env['tokenKey']}",
+                                        statementKey: "123")
+                                    .then((value) => {
+                                          setState(() {
+                                            isLoading = false;
+                                            creditResponse = value;
+                                            debugPrint(creditResponse[0]
+                                                .baseScore
+                                                .toString());
+                                          }),
+                                        });
+                          } on PlatformException {
+                            setState(() {
+                              isLoading = false;
+                              // _statementResponse = false;
+                            });
+                          } on Exception catch (e) {
+                            isLoading = false;
+                            if (kDebugMode) {
+                              print(e);
+                            }
+                            setState(() {
+                              // _statementResponse = false;
+                              isLoading = false;
+                            });
+                          }
+                        },
+                        child: const Text(
+                          'Get Transaction analytics',
+                        )),
                   ],
                 ),
               ),

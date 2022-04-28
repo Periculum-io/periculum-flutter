@@ -193,11 +193,13 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             if (args != null) {
                 var token = args.get("token")
                 var key = args.get("statementKey")
-                val endpoint = "/creditscore"
+
+                var url = "$BASE_URL/creditscore/$key"
+
                 val client = OkHttpClient()
                 var request = Request.Builder()
                     .addHeader("Authorization", "Bearer $token")
-                    .url("$BASE_URL$endpoint/$key")
+                    .url(url)
                     .build()
                 client.newCall(request).enqueue(object : Callback {
                     override fun onResponse(call: Call, response: Response) {

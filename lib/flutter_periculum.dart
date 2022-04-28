@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
+import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/TransactionStatementResponse.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -83,46 +85,44 @@ class FlutterPericulum {
     return exisitingStatementResponse;
   }
 
-  // static Future<dynamic> statementTransaction(
-  //     {required String token, required String key}) async {
-  //   Map<String, dynamic> myResponse;
+  // static Future<TransactionStatementResponse> statementTransaction({
+  //   //work in progress
+  //   required String token,
+  //   required String key,
+  // }) async {
+  //   Map<String, dynamic> map;
   //   String response = await _channel.invokeMethod('getStatementTransaction', {
   //     'token': token,
   //     'statementKey': key,
   //   });
-  //   var result = jsonDecode(response);
-  //   if (result != null) {
-  //     myResponse = {"status": true, "data": response};
-  //     print(myResponse.toString());
-  //   } else {
-  //     myResponse = {
-  //       "status": false,
-  //       "msg": result,
-  //     };
-  //   }
-  //
-  //   return myResponse;
-  // }
-  //
-  // static Future<dynamic> getExisitingCreditScore({required String token, required String statementKey,}) async{
-  //   Map<String, dynamic> myResponse;
-  //   String response = await _channel.invokeMethod(
-  //     'getExisitingCreditScore',
-  //     {'token': token,
-  //     'statementKey': statementKey},
-  //   );
-  //   var result = jsonDecode(response);
-  //   if (result != null) {
-  //     myResponse = {"status": true, "data": response};
-  //   } else {
-  //     myResponse = {
-  //       "status": false,
-  //       "msg": result,
-  //     };
-  //   }
-  //   //return an object of {"status": true, "data": (response)}
-  //   return myResponse;
-  //
+
+  //   var result = json.decode(response) as List;
+  //   print(result[0]);
+  //   map = json.decode(result[0]);
+  //   TransactionStatementResponse transactionStatementResponse =
+  //       TransactionStatementResponse.fromJson(map);
+  //   return transactionStatementResponse;
   // }
 
+  static Future<List<ExisitingCreditResponse>> getExisitingCreditScore({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getExistingCreditScore', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<ExisitingCreditResponse> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => ExisitingCreditResponse.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw '{"status": false, "error": ${e.toString()}}';
+    }
+  }
 }
