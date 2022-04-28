@@ -120,6 +120,15 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(
                       height: 10.0,
                     ),
+                    InkWell(
+                      onTap: () async {
+                        await FlutterPericulum
+                            .attachCustomerIdentificationInfromation(
+                                token: '${dotenv.env['tokenKey']}',
+                                statementKey: '125');
+                      },
+                      child: Text('Clikedc'),
+                    )
                   ],
                 ),
               ),

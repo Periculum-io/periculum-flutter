@@ -161,4 +161,42 @@ class FlutterPericulum {
       throw e.toString();
     }
   }
+
+  static Future<dynamic> attachCustomerIdentificationInfromation({
+    required String token,
+    required String statementKey,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/statements/identification');
+
+    var client = http.Client();
+    Map<String, dynamic> map;
+    var response;
+    try {
+      response = await client.patch(
+        uri,
+        body: jsonEncode({
+          "statementKey": 120,
+          "identificationData": [
+            {"IdentifierName": "bvn", "Value": "111"},
+            {"IdentifierName": "nin", "Value": "111"}
+          ]
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      var result = response.statusCode;
+
+      // map = json.decode(result);
+      // CreditScoreResponse creditScoreResponse =
+      //     CreditScoreResponse.fromJson(map);
+      debugPrint(result);
+      return response.statusCode;
+    } on FormatException catch (_) {
+      throw const FormatException("Unable to process the data");
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }
