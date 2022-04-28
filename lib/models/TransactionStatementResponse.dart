@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final transactionStatementResponse = transactionStatementResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 TransactionStatementResponse transactionStatementResponseFromJson(String str) =>
@@ -11,28 +7,27 @@ String transactionStatementResponseToJson(TransactionStatementResponse data) =>
     json.encode(data.toJson());
 
 class TransactionStatementResponse {
-  TransactionStatementResponse({
-    required this.status,
-    required this.data,
-  });
+  TransactionStatementResponse(
+      {required this.status, required this.transaction});
 
   bool status;
-  List<Datum> data;
+  List<Transaction> transaction;
 
   factory TransactionStatementResponse.fromJson(Map<String, dynamic> json) =>
       TransactionStatementResponse(
         status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        transaction: List<Transaction>.from(
+            json["data"].map((x) => Transaction.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(transaction.map((x) => x.toJson())),
       };
 }
 
-class Datum {
-  Datum({
+class Transaction {
+  Transaction({
     required this.date,
     required this.amount,
     required this.type,
@@ -46,7 +41,7 @@ class Datum {
   String description;
   double balance;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
         date: json["date"],
         amount: json["amount"].toDouble(),
         type: json["type"],

@@ -44,10 +44,7 @@ import java.util.*
 
 /** FlutterPericulumPlugin */
 class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
+   
     private lateinit var channel: MethodChannel
     lateinit var myplugin: FlutterPericulumPlugin
     lateinit var context: Activity
@@ -102,9 +99,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 val JSON = "application/json; charset=utf-8".toMediaType()
                 Log.d("Payload", payload.toString())
 
-
-
-                //The data I want to send
                 val JSONObjectString: String = gson.toJson(payload)
 
                 Log.d("PARAMETERS", JSONObjectString)
@@ -161,7 +155,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             
            }
-       } else if (call.method == "getStatementTransaction"){ //pending task
+       } else if (call.method == "getStatementTransaction"){ 
             val args = call.arguments as HashMap<String, Any>
             if (args != null){
                 var token = args.get("token")
@@ -187,7 +181,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
             }
-        } else if (call.method == "getExistingCreditScore"){ // Pending task
+        } else if (call.method == "getExistingCreditScore"){
             print("getExistingCreditScore..")
             val args = call.arguments as HashMap<String, Any>
             if (args != null) {
@@ -247,7 +241,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         statementName = getStatementName().toString()
                     }
 
-                    //Log.d("statementName", statementName)
 
                     var customer = Customer(phoneNumber, bvn)
                     var mymetadata = MetaData(customer)
@@ -297,10 +290,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             val url = "$BASE_URL$endpoint"
 
                             val JSON = "application/json; charset=utf-8".toMediaType()
-                            //Log.d("URL", url)
-
-                            //Log.d("PAYLOAD", jsonInString)
-
 
                             var body: RequestBody = RequestBody.create(JSON, jsonInString)
                             val request = Request.Builder()
@@ -312,17 +301,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             client.newCall(request).enqueue(object : Callback {
                                 override fun onResponse(call: Call, response: Response) {
                                     val tm = response.body!!.string()
-                                    //val result = JSONObject(tm)
-//                                    Log.d("Success", tm)
-//                                    result.success(hashMapOf(
-//                                        "status" to false,
-//                                        "data" to tm.toString()
-//                                    ).toString())
+                    
                                     result.success(tm)
                                 }
 
                                 override fun onFailure(call: Call, e: IOException) {
-                                    //Log.d("Error", e.message.toString())
                                     val error = e.message;
                                     result.success("{\"title\": \"${error}\"}")
                                 }
@@ -394,32 +377,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 44
             )
         }
-
-
-//        (ActivityCompat.checkSelfPermission(
-//                myplugin.context,
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                myplugin.context,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                myplugin.context,
-//                android.Manifest.permission.READ_SMS
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            ActivityCompat.requestPermissions(
-//                myplugin.context,
-//                arrayOf(
-//                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
-//                    android.Manifest.permission.READ_SMS
-//                ),
-//                44
-//            )
-//            false
-//        } else {
-//            true
-//        }
     }
 
     suspend fun requestLocationAndReadSMSPermissions() {
@@ -491,7 +448,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     suspend fun getDeviceDetails(): Device {
-        // try {
         var versionCode = Build.VERSION.RELEASE
 
         val brand = Build.BRAND
@@ -504,16 +460,8 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val id = Build.ID
         val sdk = Build.VERSION.SDK_INT
         val manufacture = Build.MANUFACTURER
-//            val user = Build.USER
-//            val type = Build.TYPE
-//            val base = Build.VERSION_CODES.BASE
-//            val incremental = Build.VERSION.INCREMENTAL
-//            val board = Build.BOARD
-//            val host = Build.HOST
         val fingerPrint = Build.FINGERPRINT
-//            val os = Build.VERSION.SDK
         val device = Build.DEVICE
-        // val androidID = Settings.Secure.ANDROID_ID
         val maxMemory = Runtime.getRuntime().totalMemory()
         var isTablet = false
         val baseOs = "Android"
@@ -563,20 +511,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             myNetwork)
 
 
-        //Log.d("MY_DEVICE", myDevice.toString())
-//            Log.d("MY_DEVICE",
-//                "Version Code: $versionCode,\n brand: $brand,\n DeviceID: $deviceId,\n Model: $model,\n" +
-//                        "ID: $id,\n sdk: $sdk,\n manufacturer: $manufacture,\n user: $user,\n " +
-//                        "type: $type,\n base: $base,\n incremental: $incremental,\n board: $board,\n " +
-//                        "host: $host,\n fingerPrint: $fingerPrint,\n os: $os,\n device: $device,\n androidID: $androidID,\n" +
-//                        "carrierName: $carrierName,\n ipAddress: $ipAddress,\n macAddress: $macAddress,\n isTablet: $isTablet,\n" +
-//                        "maxMemory: $maxMemory,\n, \"batlevel: $batlevel,\n")
-
         return myDevice
-//        } catch (e: Exception) {
-//            e.message?.let { Log.d("MY_DEVICE", it) }
-//        }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -584,7 +519,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         this.smsCount = 0
         val dateArgs: Long = Date(System.currentTimeMillis() - 180L * 24 * 3600 * 1000).getTime()
         var selectionArgs = arrayOf("" + dateArgs)
-        // Get SMS
         val addressCol = Telephony.TextBasedSmsColumns.ADDRESS
         val bodyCol = Telephony.TextBasedSmsColumns.BODY
         val typeCol = Telephony.TextBasedSmsColumns.TYPE // 1 - Inbox, 2 - Sent
@@ -682,18 +616,12 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 this.smsCount += 1
             }
-
-
-            //Log.d("MY_APP", "$address $body $type")
         }
 
         mySmses = MainSMS(this.smslist, this.smsCount)
-//        this.peruculum.sms.data = this.smslist
-//        this.peruculum.sms.count = this.smsCount
 
         Log.d("SMS COUNT", this.smsCount.toString())
         cursor.close()
-        //END of get SMS
 
         return mySmses
     }
@@ -731,7 +659,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val JSON = "application/json; charset=utf-8".toMediaType()
 
         val JSONObjectString =
-            "{'userId': 1,'id': 1,'title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit', 'body': 'quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto'}" //The data I want to send
+            "{'userId': 1,'id': 1,'title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit', 'body': 'quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto'}" 
 
         var body: RequestBody = RequestBody.create(JSON, JSONObjectString)
         val request = Request.Builder().post(body).url(url).build()

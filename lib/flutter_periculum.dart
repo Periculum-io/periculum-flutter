@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
 import 'package:flutter_periculum/models/ExistingStatment.dart';
-import 'package:flutter_periculum/models/TransactionStatementResponse.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -85,7 +84,7 @@ class FlutterPericulum {
     return exisitingStatementResponse;
   }
 
-  static Future<List<ExisitingCreditResponse>> getExisitingCreditScore({
+  static Future<List<ExisitingCreditScoreResponse>> getExisitingCreditScore({
     required String token,
     required String statementKey,
   }) async {
@@ -95,10 +94,10 @@ class FlutterPericulum {
     });
 
     try {
-      List<ExisitingCreditResponse> responseList;
+      List<ExisitingCreditScoreResponse> responseList;
 
       responseList = (json.decode(response) as List)
-          .map((i) => ExisitingCreditResponse.fromJson(i))
+          .map((i) => ExisitingCreditScoreResponse.fromJson(i))
           .toList();
 
       return responseList;
