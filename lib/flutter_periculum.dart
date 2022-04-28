@@ -68,7 +68,7 @@ class FlutterPericulum {
     return affordabilityResponse;
   }
 
-  static Future<Statement> statementAnalytics({
+  static Future<StatementResponse> statementAnalytics({
     required String token,
     required String statementKey,
   }) async {
@@ -79,7 +79,8 @@ class FlutterPericulum {
     });
 
     map = json.decode(response);
-    Statement exisitingStatementResponse = Statement.fromJson(map);
+    StatementResponse exisitingStatementResponse =
+        StatementResponse.fromJson(map);
     debugPrint(exisitingStatementResponse.name);
     return exisitingStatementResponse;
   }
