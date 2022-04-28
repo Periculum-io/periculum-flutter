@@ -22,7 +22,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  late StatementResponse statementResponse;
+  late Statement statement;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
@@ -122,12 +122,12 @@ class _MyAppState extends State<MyApp> {
                           isLoading = false;
                         });
                       },
-                      child: Text('Affordabilyty Analysis'),
+                      child: const Text('Affordabilyty Analysis'),
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
-                    Center(
+                    const Center(
                       child: Text('Running on: '),
                     ),
                     TextButton(
@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
                                           setState(() {
                                             isLoading = false;
                                             _response = true;
-                                            statementResponse = value;
+                                            statement = value;
                                           }),
                                         });
                           } on PlatformException {
