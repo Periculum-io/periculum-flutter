@@ -84,7 +84,7 @@ class FlutterPericulum {
     return exisitingStatementResponse;
   }
 
-  static Future<List<ExisitingCreditScoreResponse>> getExisitingCreditScore({
+  static Future<List<CreditScoreResponse>> getExisitingCreditScore({
     required String token,
     required String statementKey,
   }) async {
@@ -94,10 +94,10 @@ class FlutterPericulum {
     });
 
     try {
-      List<ExisitingCreditScoreResponse> responseList;
+      List<CreditScoreResponse> responseList;
 
       responseList = (json.decode(response) as List)
-          .map((i) => ExisitingCreditScoreResponse.fromJson(i))
+          .map((i) => CreditScoreResponse.fromJson(i))
           .toList();
 
       return responseList;

@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-ExisitingCreditScoreResponse exisitingCreditScoreResponseFromJson(String str) =>
-    ExisitingCreditScoreResponse.fromJson(json.decode(str));
+CreditScoreResponse creditScoreResponseFromJson(String str) =>
+    CreditScoreResponse.fromJson(json.decode(str));
 
-String exisitingCreditScoreResponseToJson(ExisitingCreditScoreResponse data) =>
+String creditScoreResponseToJson(CreditScoreResponse data) =>
     json.encode(data.toJson());
 
-class ExisitingCreditScoreResponse {
-  ExisitingCreditScoreResponse({
+class CreditScoreResponse {
+  CreditScoreResponse({
     required this.rulesScore,
     required this.baseScore,
     required this.calculatedScore,
@@ -25,8 +25,8 @@ class ExisitingCreditScoreResponse {
   List<String> failReasons;
   String type;
 
-  factory ExisitingCreditScoreResponse.fromJson(Map<String, dynamic> json) =>
-      ExisitingCreditScoreResponse(
+  factory CreditScoreResponse.fromJson(Map<String, dynamic> json) =>
+      CreditScoreResponse(
         rulesScore: json["rulesScore"],
         baseScore: json["baseScore"],
         calculatedScore: json["calculatedScore"],
