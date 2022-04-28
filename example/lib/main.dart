@@ -21,7 +21,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  late StatementResponse statement;
+  late StatementResponse statementResponse;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
