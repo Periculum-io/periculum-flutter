@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -41,16 +43,13 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RaisedButton(
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.green,
+                    ElevatedButton(
                       onPressed: () async {
                         setState(() {
                           isLoading = true;
@@ -75,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                           isLoading = false;
                         });
                       },
-                      child: Text('Mobile Data Analysis'),
+                      child: const Text('Mobile Data Analysis'),
                     ),
                     const SizedBox(
                       height: 10.0,
@@ -86,10 +85,7 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    RaisedButton(
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.green,
+                    ElevatedButton(
                       onPressed: () async {
                         setState(() {
                           isLoading = true;
@@ -201,14 +197,22 @@ class _MyAppState extends State<MyApp> {
                         child: const Text(
                           'Get Transaction analytics',
                         )),
-                    InkWell(
-                      onTap: () async {
+                    ElevatedButton(
+                      onPressed: () async {
                         await FlutterPericulum.getStatementTransaction(
                             token: '${dotenv.env['tokenKey']}',
                             statementKey: '125');
                       },
                       child: const Text("Press Statement Transation"),
-                    )
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await FlutterPericulum.generateCreditScore(
+                            token: '${dotenv.env['tokenKey']}',
+                            statementKey: '120');
+                      },
+                      child: const Text("Generate Credit Score"),
+                    ),
                   ],
                 ),
               ),
