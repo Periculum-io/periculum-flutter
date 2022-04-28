@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
-import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/Statement.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -66,7 +67,7 @@ class FlutterPericulum {
     return affordabilityResponse;
   }
 
-  static Future<ExisitingStatementResponse> statementAnalytics({
+  static Future<Statement> statementAnalytics({
     required String token,
     required String statementKey,
   }) async {
@@ -77,9 +78,30 @@ class FlutterPericulum {
     });
 
     map = json.decode(response);
-    ExisitingStatementResponse exisitingStatementResponse =
-        ExisitingStatementResponse.fromJson(map);
+    Statement exisitingStatementResponse = Statement.fromJson(map);
     debugPrint(exisitingStatementResponse.name);
     return exisitingStatementResponse;
+  }
+
+  static Future<List<CreditScoreResponse>> getExisitingCreditScore({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getExistingCreditScore', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<CreditScoreResponse> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => CreditScoreResponse.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw '{"status": false, "error": ${e.toString()}}';
+    }
   }
 }

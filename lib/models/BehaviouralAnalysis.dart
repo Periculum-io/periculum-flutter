@@ -1,4 +1,3 @@
-// ignore: file_names
 class BehavioralAnalysis {
   BehavioralAnalysis({
     required this.monthToMonthInflowToOutflowRate,

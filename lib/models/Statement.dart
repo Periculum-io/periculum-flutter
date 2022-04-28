@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final exisitingStatementResponse = exisitingStatementResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'BehaviouralAnalysis.dart';
@@ -11,14 +7,12 @@ import 'IncomeAnalysis.dart';
 import 'SpendAnalysis.dart';
 import 'TransactionPatternAnalysis.dart';
 
-ExisitingStatementResponse exisitingStatementResponseFromJson(String str) =>
-    ExisitingStatementResponse.fromJson(json.decode(str));
+Statement statementFromJson(String str) => Statement.fromJson(json.decode(str));
 
-String exisitingStatementResponseToJson(ExisitingStatementResponse data) =>
-    json.encode(data.toJson());
+String statementToJson(Statement data) => json.encode(data.toJson());
 
-class ExisitingStatementResponse {
-  ExisitingStatementResponse({
+class Statement {
+  Statement({
     required this.key,
     required this.name,
     required this.source,
@@ -66,8 +60,7 @@ class ExisitingStatementResponse {
   IncomeAnalysis incomeAnalysis;
   int confidenceOnParsing;
 
-  factory ExisitingStatementResponse.fromJson(Map<String, dynamic> json) =>
-      ExisitingStatementResponse(
+  factory Statement.fromJson(Map<String, dynamic> json) => Statement(
         key: json["key"],
         name: json["name"],
         source: json["source"],

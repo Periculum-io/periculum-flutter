@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
-import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/Statement.dart';
 
 void main() async {
   await dotenv.load();
@@ -21,12 +22,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  // String _platformVersion = 'Unknown';
-  late ExisitingStatementResponse exisitingStatementResponse;
+  late StatementResponse statementResponse;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
-  // bool _statementResponse = false;
+  late List<CreditScoreResponse> creditResponse;
 
   @override
   void initState() {
@@ -48,8 +48,6 @@ class _MyAppState extends State<MyApp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RaisedButton(
-                      //     disabledColor: Colors.red,
-                      // disabledTextColor: Colors.black,
                       padding: const EdgeInsets.all(20),
                       textColor: Colors.white,
                       color: Colors.green,
@@ -65,16 +63,11 @@ class _MyAppState extends State<MyApp> {
                               bvn: "12345678901",
                               token: "${dotenv.env['tokenKey']}");
                         } on PlatformException {
-                          // response = 'Failed to get platform version.';
                           setState(() {
                             _mobileData = response;
                             isLoading = false;
                           });
                         }
-
-                        // If the widget was removed from the tree while the asynchronous platform
-                        // message was in flight, we want to discard the reply rather than calling
-                        // setState to update our non-existent appearance.
                         if (!mounted) return;
 
                         setState(() {
@@ -119,7 +112,6 @@ class _MyAppState extends State<MyApp> {
                                       });
                         } on PlatformException {
                           setState(() {
-                            // _mobileData = response;
                             isLoading = false;
                           });
                         }
@@ -127,7 +119,6 @@ class _MyAppState extends State<MyApp> {
                         if (!mounted) return;
 
                         setState(() {
-                          // _platformVersion = response;
                           isLoading = false;
                         });
                       },
@@ -151,9 +142,8 @@ class _MyAppState extends State<MyApp> {
                                           setState(() {
                                             isLoading = false;
                                             _response = true;
-                                            exisitingStatementResponse = value;
+                                            statementResponse = value;
                                           }),
-                                          // debugPrint(_statementResponseText),
                                         });
                           } on PlatformException {
                             setState(() {
@@ -174,66 +164,43 @@ class _MyAppState extends State<MyApp> {
                           'Get Exisiting statement analytics',
                         )),
                     Text("Get statement $_response: "),
-                    // TextButton(
-                    //     onPressed: () async {
-                    //       setState(() {
-                    //         isLoading = true;
-                    //       });
-                    //       var response;
-                    //       try {
-                    //         response =
-                    //             await FlutterPericulum.statementTransaction(token:
-                    //             "${dotenv.env['tokenKey']}", key: "120").then((value) => {
-                    //                   setState(() {
-                    //                     isLoading = false;
-                    //                     setState(() {
-                    //                       _statementResponse = true;
-                    //                     });
-                    //                   }),
-                    //                   debugPrint(value.toString()),
-                    //                 });
-                    //       } on PlatformException {
-                    //         setState(() {
-                    //           isLoading = false;
-                    //           _statementResponse = false;
-                    //         });
-                    //       } on Exception catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //         setState(() {
-                    //           _statementResponse = false;
-                    //           isLoading = false;
-                    //         });
-                    //       }
-                    //     },
-                    //     child: const Text(
-                    //       'Get Exisiting statement transaction analytics',
-                    //     )),
-                    // Text("Get statement Transcation: $_statementResponse"), TextButton(
-                    //     onPressed: () async {
-                    //       print('loading..');
-                    //       var response;
-                    //       try {
-                    //         response =
-                    //         await FlutterPericulum.statementTransaction(token:
-                    //         "${dotenv.env['tokenKey']}", key: "125").then((value) => {
-                    //          print('loading completed..'),
-                    //           debugPrint(value.toString()),
-                    //         });
-                    //       } on PlatformException catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //         } on Exception catch (e) {
-                    //         if (kDebugMode) {
-                    //           print(e);
-                    //         }
-                    //       }
-                    //     },
-                    //     child: const Text(
-                    //       'Get Exisiting credit score',
-                    //     )),
+                    TextButton(
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          var response;
+                          try {
+                            response =
+                                await FlutterPericulum.getExisitingCreditScore(
+                                        token: "${dotenv.env['tokenKey']}",
+                                        statementKey: "123")
+                                    .then((value) => {
+                                          setState(() {
+                                            isLoading = false;
+                                            creditResponse = value;
+                                            debugPrint(creditResponse[0]
+                                                .baseScore
+                                                .toString());
+                                          }),
+                                        });
+                          } on PlatformException {
+                            setState(() {
+                              isLoading = false;
+                            });
+                          } on Exception catch (e) {
+                            isLoading = false;
+                            if (kDebugMode) {
+                              print(e);
+                            }
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        },
+                        child: const Text(
+                          'Get Transaction analytics',
+                        )),
                   ],
                 ),
               ),

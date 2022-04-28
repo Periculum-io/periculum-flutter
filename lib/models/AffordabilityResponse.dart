@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final affordabilityResponse = affordabilityResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 AffordabilityResponse affordabilityResponseFromJson(String str) =>
