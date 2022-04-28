@@ -6,7 +6,7 @@ import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/Statement.dart';
+import 'package:flutter_periculum/models/StatementResponse.dart';
 
 void main() async {
   await dotenv.load();
@@ -22,7 +22,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  late Statement statement;
+  late StatementResponse statement;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
@@ -130,85 +130,6 @@ class _MyAppState extends State<MyApp> {
                     const Center(
                       child: Text('Running on: '),
                     ),
-                    TextButton(
-                        onPressed: () async {
-                          var response;
-                          try {
-                            response =
-                                await FlutterPericulum.statementAnalytics(
-                                        token: "${dotenv.env['tokenKey']}",
-                                        statementKey: '125')
-                                    .then((value) => {
-                                          setState(() {
-                                            isLoading = false;
-                                            _response = true;
-                                            statement = value;
-                                          }),
-                                        });
-                          } on PlatformException {
-                            setState(() {
-                              isLoading = false;
-                              _response = false;
-                            });
-                          } on Exception catch (e) {
-                            if (kDebugMode) {
-                              print(e);
-                            }
-                            setState(() {
-                              _response = false;
-                              isLoading = false;
-                            });
-                          }
-                        },
-                        child: const Text(
-                          'Get Exisiting statement analytics',
-                        )),
-                    Text("Get statement $_response: "),
-                    TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          var response;
-                          try {
-                            response =
-                                await FlutterPericulum.getExisitingCreditScore(
-                                        token: "${dotenv.env['tokenKey']}",
-                                        statementKey: "123")
-                                    .then((value) => {
-                                          setState(() {
-                                            isLoading = false;
-                                            creditResponse = value;
-                                            debugPrint(creditResponse[0]
-                                                .baseScore
-                                                .toString());
-                                          }),
-                                        });
-                          } on PlatformException {
-                            setState(() {
-                              isLoading = false;
-                            });
-                          } on Exception catch (e) {
-                            isLoading = false;
-                            if (kDebugMode) {
-                              print(e);
-                            }
-                            setState(() {
-                              isLoading = false;
-                            });
-                          }
-                        },
-                        child: const Text(
-                          'Get Transaction analytics',
-                        )),
-                    InkWell(
-                      onTap: () async {
-                        await FlutterPericulum.getStatementTransaction(
-                            token: '${dotenv.env['tokenKey']}',
-                            statementKey: '125');
-                      },
-                      child: const Text("Press Statement Transation"),
-                    )
                   ],
                 ),
               ),
