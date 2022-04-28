@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/Statement.dart';
+import 'package:flutter_periculum/models/StatementResponse.dart';
+import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -67,7 +68,7 @@ class FlutterPericulum {
     return affordabilityResponse;
   }
 
-  static Future<Statement> statementAnalytics({
+  static Future<StatementResponse> statementAnalytics({
     required String token,
     required String statementKey,
   }) async {
@@ -78,7 +79,8 @@ class FlutterPericulum {
     });
 
     map = json.decode(response);
-    Statement exisitingStatementResponse = Statement.fromJson(map);
+    StatementResponse exisitingStatementResponse =
+        StatementResponse.fromJson(map);
     debugPrint(exisitingStatementResponse.name);
     return exisitingStatementResponse;
   }
@@ -102,6 +104,28 @@ class FlutterPericulum {
       return responseList;
     } catch (e) {
       throw '{"status": false, "error": ${e.toString()}}';
+    }
+  }
+
+  static Future<List<Transaction>> getStatementTransaction({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getStatementTransaction', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<Transaction> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => Transaction.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw e.toString();
     }
   }
 }
