@@ -112,4 +112,3 @@ data class SMS(
     val using_mode: Int = 0,
     val announcements_subtype: Int = 0,
 )
-

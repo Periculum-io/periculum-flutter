@@ -1,12 +1,14 @@
-import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/flutter_periculum.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_periculum/models/AffordabilityResponse.dart';
+import 'package:flutter_periculum/models/ExistingStatment.dart';
 
-void main() {
+void main() async {
+  await dotenv.load();
   runApp(const MyApp());
 }
 
@@ -19,8 +21,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  String _platformVersion = 'Unknown';
+  // String _platformVersion = 'Unknown';
+  late ExisitingStatementResponse exisitingStatementResponse;
+  late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
+  bool _response = false;
+  // bool _statementResponse = false;
 
   @override
   void initState() {
@@ -57,8 +63,7 @@ class _MyAppState extends State<MyApp> {
                           response = await FlutterPericulum.mobileDataAnalysis(
                               phoneNumber: "08023456789",
                               bvn: "12345678901",
-                              token:
-                                  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1VSkJOVUk0UkRFek9FVTBORGd4UWpVMVJqTTJPVEJEUXpRMFF6bEJRa1F6UWpnd1JETkVSQSJ9.eyJodHRwczovL2luc2lnaHRzLXBlcmljdWx1bS5jb20vdGVuYW50IjoibnVjbGV1c2lzIiwiaXNzIjoiaHR0cHM6Ly9wZXJpY3VsdW0tdGVjaG5vbG9naWVzLWluYy5hdXRoMC5jb20vIiwic3ViIjoiSDR1VHJzdjJoMGlEVGlTMDR2NmVGWmNpdTNLMGJvWnJAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vYXBpLmluc2lnaHRzLXBlcmljdWx1bS5jb20iLCJpYXQiOjE2NDUxNzI4MjAsImV4cCI6MTY0NTc3NzYyMCwiYXpwIjoiSDR1VHJzdjJoMGlEVGlTMDR2NmVGWmNpdTNLMGJvWnIiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.V-lS3WBeB3nkaw2SUT_zYn3vEzx5s2jtLn5PnFD2RHov02MCSewD1ZJzDD9w8UUT0yKHNGwT8jov4twla0RI9gJx64qHSoyAky6uzeeCRDhQAJ9NsiEkqgAFL8xSERsww6bZU2-PaXOpGZ0altf2XEW3duYrvDkfh2W_xIdzfzIHH6wQvnym07xWPVcRSniWfGkqRW1g8TLrWeru493OI_pczAP3FSJ_hjma-eZohIr750O1avsPDAkmiO4r0jxtewzgVsGZRCetuTDi0Y0d8wdXZ__Q2pzc7tdNWDl8tP2jnZ4VHYktbNz3cFK_P7JZxGhIGXKnMuyPa4XM0CTj5w");
+                              token: "${dotenv.env['tokenKey']}");
                         } on PlatformException {
                           // response = 'Failed to get platform version.';
                           setState(() {
@@ -79,13 +84,13 @@ class _MyAppState extends State<MyApp> {
                       },
                       child: Text('Mobile Data Analysis'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     Center(
                       child: Text('Running on: $_mobileData\n'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20.0,
                     ),
                     RaisedButton(
@@ -98,41 +103,137 @@ class _MyAppState extends State<MyApp> {
                         });
                         var response;
                         try {
-                          response = await FlutterPericulum.affordabilityAnalysis(
-                              statementKey: 3,
-                              dti: 2.0,
-                              loanTenure: 30,
-                              averageMonthlyTotalExpenses: 4000,
-                              averageMonthlyLoanRepaymentAmount: 1000,
-                              token:
-                                  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1VSkJOVUk0UkRFek9FVTBORGd4UWpVMVJqTTJPVEJEUXpRMFF6bEJRa1F6UWpnd1JETkVSQSJ9.eyJodHRwczovL2luc2lnaHRzLXBlcmljdWx1bS5jb20vdGVuYW50IjoibnVjbGV1c2lzIiwiaXNzIjoiaHR0cHM6Ly9wZXJpY3VsdW0tdGVjaG5vbG9naWVzLWluYy5hdXRoMC5jb20vIiwic3ViIjoiSDR1VHJzdjJoMGlEVGlTMDR2NmVGWmNpdTNLMGJvWnJAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vYXBpLmluc2lnaHRzLXBlcmljdWx1bS5jb20iLCJpYXQiOjE2NDUxNzI4MjAsImV4cCI6MTY0NTc3NzYyMCwiYXpwIjoiSDR1VHJzdjJoMGlEVGlTMDR2NmVGWmNpdTNLMGJvWnIiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.V-lS3WBeB3nkaw2SUT_zYn3vEzx5s2jtLn5PnFD2RHov02MCSewD1ZJzDD9w8UUT0yKHNGwT8jov4twla0RI9gJx64qHSoyAky6uzeeCRDhQAJ9NsiEkqgAFL8xSERsww6bZU2-PaXOpGZ0altf2XEW3duYrvDkfh2W_xIdzfzIHH6wQvnym07xWPVcRSniWfGkqRW1g8TLrWeru493OI_pczAP3FSJ_hjma-eZohIr750O1avsPDAkmiO4r0jxtewzgVsGZRCetuTDi0Y0d8wdXZ__Q2pzc7tdNWDl8tP2jnZ4VHYktbNz3cFK_P7JZxGhIGXKnMuyPa4XM0CTj5w");
+                          response =
+                              await FlutterPericulum.affordabilityAnalysis(
+                                      statementKey: 3,
+                                      dti: 2.0,
+                                      loanTenure: 30,
+                                      averageMonthlyTotalExpenses: 4000,
+                                      averageMonthlyLoanRepaymentAmount: 1000,
+                                      token: "${dotenv.env['tokenKey']}")
+                                  .then((value) => {
+                                        affordabilityResponse = value,
+                                        debugPrint(value
+                                            .averageMonthlyLoanRepaymentAmount
+                                            .toString())
+                                      });
                         } on PlatformException {
                           setState(() {
-                            _mobileData = response;
+                            // _mobileData = response;
                             isLoading = false;
                           });
                         }
 
                         if (!mounted) return;
 
-                        final body = jsonDecode(response.toString());
-
-                        print(body["data"].toString());
-                        // print(body["dti"]);
-
                         setState(() {
-                          _platformVersion = response;
+                          // _platformVersion = response;
                           isLoading = false;
                         });
                       },
                       child: Text('Affordabilyty Analysis'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     Center(
-                      child: Text('Running on: $_platformVersion\n'),
+                      child: Text('Running on: '),
                     ),
+                    TextButton(
+                        onPressed: () async {
+                          var response;
+                          try {
+                            response =
+                                await FlutterPericulum.statementAnalytics(
+                                        token: "${dotenv.env['tokenKey']}",
+                                        statementKey: '125')
+                                    .then((value) => {
+                                          setState(() {
+                                            isLoading = false;
+                                            _response = true;
+                                            exisitingStatementResponse = value;
+                                          }),
+                                          // debugPrint(_statementResponseText),
+                                        });
+                          } on PlatformException {
+                            setState(() {
+                              isLoading = false;
+                              _response = false;
+                            });
+                          } on Exception catch (e) {
+                            if (kDebugMode) {
+                              print(e);
+                            }
+                            setState(() {
+                              _response = false;
+                              isLoading = false;
+                            });
+                          }
+                        },
+                        child: const Text(
+                          'Get Exisiting statement analytics',
+                        )),
+                    Text("Get statement $_response: "),
+                    // TextButton(
+                    //     onPressed: () async {
+                    //       setState(() {
+                    //         isLoading = true;
+                    //       });
+                    //       var response;
+                    //       try {
+                    //         response =
+                    //             await FlutterPericulum.statementTransaction(token:
+                    //             "${dotenv.env['tokenKey']}", key: "120").then((value) => {
+                    //                   setState(() {
+                    //                     isLoading = false;
+                    //                     setState(() {
+                    //                       _statementResponse = true;
+                    //                     });
+                    //                   }),
+                    //                   debugPrint(value.toString()),
+                    //                 });
+                    //       } on PlatformException {
+                    //         setState(() {
+                    //           isLoading = false;
+                    //           _statementResponse = false;
+                    //         });
+                    //       } on Exception catch (e) {
+                    //         if (kDebugMode) {
+                    //           print(e);
+                    //         }
+                    //         setState(() {
+                    //           _statementResponse = false;
+                    //           isLoading = false;
+                    //         });
+                    //       }
+                    //     },
+                    //     child: const Text(
+                    //       'Get Exisiting statement transaction analytics',
+                    //     )),
+                    // Text("Get statement Transcation: $_statementResponse"), TextButton(
+                    //     onPressed: () async {
+                    //       print('loading..');
+                    //       var response;
+                    //       try {
+                    //         response =
+                    //         await FlutterPericulum.statementTransaction(token:
+                    //         "${dotenv.env['tokenKey']}", key: "125").then((value) => {
+                    //          print('loading completed..'),
+                    //           debugPrint(value.toString()),
+                    //         });
+                    //       } on PlatformException catch (e) {
+                    //         if (kDebugMode) {
+                    //           print(e);
+                    //         }
+                    //         } on Exception catch (e) {
+                    //         if (kDebugMode) {
+                    //           print(e);
+                    //         }
+                    //       }
+                    //     },
+                    //     child: const Text(
+                    //       'Get Exisiting credit score',
+                    //     )),
                   ],
                 ),
               ),

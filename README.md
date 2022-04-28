@@ -9,40 +9,42 @@ Android
 ## Installation and usage
 1. Add the latest version of the plugin to your pubspec.yaml (and run `pub get`)
 dependencies:
-    flutter_periculum: ^0.0.2
+    `flutter_periculum: ^0.0.2`
 
 2. Import  the plugin and use it in your flutter App.0
 
-import 'package:flutter_periculum/flutter_periculum.dart';
+`import 'package:flutter_periculum/flutter_periculum.dart';`
 
 ## Example
 ...dart
-var response;
+```
+        var response;
 
-try {
+        try {
 
-  response = await FlutterPericulum.affordabilityAnalysis(
-      statementKey: 3,
-      dti: 2.0,
-      loanTenure: 30,
-      averageMonthlyTotalExpenses: 4000, //optional
-      averageMonthlyLoanRepaymentAmount: 1000, //optional
-      token: "..."
-      );
+          response = await FlutterPericulum.affordabilityAnalysis(
+              statementKey: 3,
+              dti: 2.0,
+              loanTenure: 30,
+              averageMonthlyTotalExpenses: 4000, //optional
+              averageMonthlyLoanRepaymentAmount: 1000, //optional
+              token: "..."
+              );
 
-} on PlatformException {
+        } on PlatformException {
 
-  response = 'Failed to get platform version.';
+          response = 'Failed to get platform version.';
 
-}
+        }
 
-if (!mounted) return;
+        if (!mounted) return;
 
-final body = jsonDecode(response.toString());
+        final body = jsonDecode(response.toString());
+```
 ...
 
 ## Compatibility
-Minimum Android SDK: Periculum requires a minimum API level of 21.
+Minimum Android SDK: `Periculum requires a minimum API level of 21.`
 
 ## Info
 For this plugin to work, you must have a Periculum account and you'll also need to use your merchant Id and secret key to generate a token from the Periculum API.

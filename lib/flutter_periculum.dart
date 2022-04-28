@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_periculum/models/AffordabilityResponse.dart';
+import 'package:flutter_periculum/models/ExistingStatment.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -24,7 +27,7 @@ class FlutterPericulum {
 
     var result = jsonDecode(response);
 
-    if (result["status"] == null) {
+    if (result != null) {
       myresponse = {"status": true, "data": response};
     } else {
       myresponse = {
@@ -36,7 +39,7 @@ class FlutterPericulum {
     return jsonEncode(myresponse).toString();
   }
 
-  static Future<String> affordabilityAnalysis({
+  static Future<AffordabilityResponse> affordabilityAnalysis({
     required String token,
     required double dti,
     required int statementKey,
@@ -44,7 +47,9 @@ class FlutterPericulum {
     int? averageMonthlyTotalExpenses,
     int? averageMonthlyLoanRepaymentAmount,
   }) async {
-    Map<String, dynamic> myresponse;
+    Map<String, dynamic> map;
+
+    AffordabilityResponse affordabilityResponse;
     String response =
         await _channel.invokeMethod('generateAffordabilityAnalysis', {
       'token': token,
@@ -55,17 +60,26 @@ class FlutterPericulum {
       'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
     });
 
-    var result = jsonDecode(response);
+    var result = json.decode(response);
+    map = json.decode(response);
+    affordabilityResponse = AffordabilityResponse.fromJson(map);
+    return affordabilityResponse;
+  }
 
-    if (result["status"] == null) {
-      myresponse = {"status": true, "data": response};
-    } else {
-      myresponse = {
-        "status": false,
-        "msg": result["title"],
-      };
-    }
+  static Future<ExisitingStatementResponse> statementAnalytics({
+    required String token,
+    required String statementKey,
+  }) async {
+    Map<String, dynamic> map;
+    String response = await _channel.invokeMethod('getStatementAnalytics', {
+      'token': token,
+      'statementKey': statementKey,
+    });
 
-    return jsonEncode(myresponse).toString();
+    map = json.decode(response);
+    ExisitingStatementResponse exisitingStatementResponse =
+        ExisitingStatementResponse.fromJson(map);
+    debugPrint(exisitingStatementResponse.name);
+    return exisitingStatementResponse;
   }
 }

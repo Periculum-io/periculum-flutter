@@ -52,7 +52,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     lateinit var myplugin: FlutterPericulumPlugin
     lateinit var context: Activity
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private val BASE_URL: String = "https://api.insights-periculum.com/"
+    private val BASE_URL: String = "https://api.insights-periculum.com"
 
     lateinit var periculum: Periculum
     var smsCount = 0
@@ -72,6 +72,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+      
         if (call.method == "generateAffordabilityAnalysis") {
             val args = call.arguments as HashMap<String, Any>
 
@@ -94,7 +95,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     averageMonthlyLoanRepaymentAmount = averageMonthlyLoanRepaymentAmount as Int?,
                 )
 
-                val endpoint = "affordability"
+                val endpoint = "/affordability"
 
                 val url = "$BASE_URL$endpoint"
 
@@ -105,8 +106,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 //The data I want to send
                 val JSONObjectString: String = gson.toJson(payload)
-                //val JSONObjectString = "{\"dti\": $dti,\"statementKey\": $statementKey,\"loanTenure\": $loanTenure}"
-
 
                 Log.d("PARAMETERS", JSONObjectString)
 
@@ -120,20 +119,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 client.newCall(request).enqueue(object : Callback {
                     override fun onResponse(call: Call, response: Response) {
                         val tm = response.body!!.string()
-                        //val result = JSONObject(tm)
-                        //Log.d("Success", tm)
-//                        result.success(hashMapOf(
-//                            "status" to true,
-//                            "data" to tm
-//                        ).toString())
 
                         result.success(tm)
                     }
 
                     override fun onFailure(call: Call, e: IOException) {
-//                        Log.d("Failed", "FAILED")
-//                        e.printStackTrace()
-                        //Log.println(Log.DEBUG, "debug", "Permission granted");
                         val error = e.message
                         result.success("{\"title\": \"${error}\"}")
                     }
@@ -142,7 +132,88 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
 
-        } else if (call.method == "generateMobileDataAnalysis") {
+        } else if (call.method == "getStatementAnalytics"){
+            val args = call.arguments as HashMap<String, Any>
+            if (args != null){
+                val token = args.get("token")
+                var key = args.get("statementKey")
+                val endpoint = "/statements/"
+
+                var url = "$BASE_URL$endpoint$key"
+
+
+                val client = OkHttpClient()
+                var request = Request.Builder()
+                        .addHeader("Authorization", "Bearer $token")
+                        .url(url)
+                        .build()
+                    client.newCall(request).enqueue(object : Callback{
+                        override fun onResponse(call: Call, response: Response){
+                            val callResponse = response.body!!.string()
+                            result.success("$callResponse");
+                        }
+
+                        override fun onFailure(call: Call, e: IOException) {
+                            val error = e.message
+                            result.success("{\"title\": \"${error}\"}")
+                        }
+                    })
+
+            
+           }
+       } else if (call.method == "getStatementTransaction"){ //pending task
+            val args = call.arguments as HashMap<String, Any>
+            if (args != null){
+                var token = args.get("token")
+                var key = args.get("statementKey")
+                val endpoint = "/statements"
+                val client = OkHttpClient()
+                var request = Request.Builder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .url("$BASE_URL$endpoint/$key/transactions")
+                    .build()
+                client.newCall(request).enqueue(object : Callback{
+                    override fun onResponse(call: Call, response: Response){
+                        val callResponse = response.body!!.string()
+
+                        result.success("$callResponse");
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        val error = e.message
+                        result.success("{\"title\": \"${error}\"}")
+                    }
+                })
+
+
+            }
+        } else if (call.method == "getExistingCreditScore"){ // Pending task
+            print("getExistingCreditScore..")
+            val args = call.arguments as HashMap<String, Any>
+            if (args != null) {
+                var token = args.get("token")
+                var key = args.get("statementKey")
+                val endpoint = "/creditscore"
+                val client = OkHttpClient()
+                var request = Request.Builder()
+                    .addHeader("Authorization", "Bearer $token")
+                    .url("$BASE_URL$endpoint/$key")
+                    .build()
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onResponse(call: Call, response: Response) {
+                        val callResponse = response.body!!.string()
+
+                        result.success("$callResponse");
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        val error = e.message
+                        result.success("{\"title\": \"${error}\"}")
+                    }
+                })
+
+            }
+        }else if (call.method == "generateMobileDataAnalysis") {
             GlobalScope.launch(Dispatchers.IO) {
                 if (!isLocationAndReadSMSPermissionGranted()) {
                     async { requestLocationAndReadSMSPermissions() }
@@ -219,7 +290,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                             val jsonInString: String = gson.toJson(periculum)
 
-                            val endpoint = "mobile/analytics"
+                            val endpoint = "/mobile/analytics"
 
                             val url = "$BASE_URL$endpoint"
 
