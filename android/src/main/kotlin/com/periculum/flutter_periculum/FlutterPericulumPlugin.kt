@@ -124,8 +124,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 })
 
             }
-
-
         } else if (call.method == "getStatementAnalytics"){
             val args = call.arguments as HashMap<String, Any>
             if (args != null){

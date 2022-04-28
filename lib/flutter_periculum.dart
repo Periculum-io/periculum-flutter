@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
 import 'package:flutter_periculum/models/Statement.dart';
+import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -102,6 +103,28 @@ class FlutterPericulum {
       return responseList;
     } catch (e) {
       throw '{"status": false, "error": ${e.toString()}}';
+    }
+  }
+
+  static Future<List<Transaction>> getStatementTransaction({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getStatementTransaction', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<Transaction> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => Transaction.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw e.toString();
     }
   }
 }

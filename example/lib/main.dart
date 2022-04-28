@@ -201,6 +201,14 @@ class _MyAppState extends State<MyApp> {
                         child: const Text(
                           'Get Transaction analytics',
                         )),
+                    InkWell(
+                      onTap: () async {
+                        await FlutterPericulum.getStatementTransaction(
+                            token: '${dotenv.env['tokenKey']}',
+                            statementKey: '125');
+                      },
+                      child: const Text("Press Statement Transation"),
+                    )
                   ],
                 ),
               ),
