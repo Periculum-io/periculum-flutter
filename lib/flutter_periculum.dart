@@ -153,7 +153,6 @@ class FlutterPericulum {
       map = json.decode(result);
       CreditScoreResponse creditScoreResponse =
           CreditScoreResponse.fromJson(map);
-      debugPrint(creditScoreResponse.passReasons[0].toString());
       return creditScoreResponse;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
