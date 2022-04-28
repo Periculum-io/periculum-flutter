@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final exisitingStatementResponse = exisitingStatementResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'BehaviouralAnalysis.dart';

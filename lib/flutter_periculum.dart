@@ -85,25 +85,6 @@ class FlutterPericulum {
     return exisitingStatementResponse;
   }
 
-  // static Future<TransactionStatementResponse> statementTransaction({
-  //   //work in progress
-  //   required String token,
-  //   required String key,
-  // }) async {
-  //   Map<String, dynamic> map;
-  //   String response = await _channel.invokeMethod('getStatementTransaction', {
-  //     'token': token,
-  //     'statementKey': key,
-  //   });
-
-  //   var result = json.decode(response) as List;
-  //   print(result[0]);
-  //   map = json.decode(result[0]);
-  //   TransactionStatementResponse transactionStatementResponse =
-  //       TransactionStatementResponse.fromJson(map);
-  //   return transactionStatementResponse;
-  // }
-
   static Future<List<ExisitingCreditResponse>> getExisitingCreditScore({
     required String token,
     required String statementKey,

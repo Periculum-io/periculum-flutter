@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final exisitingCreditResponse = exisitingCreditResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 ExisitingCreditResponse exisitingCreditResponseFromJson(String str) =>
