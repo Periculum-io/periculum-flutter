@@ -21,7 +21,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
+<<<<<<< HEAD
   late StatementResponse statementResponse;
+=======
+  late StatementResponse statement;
+>>>>>>> ebcb05f23b8657a6612638db84238e391cc014ae
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
@@ -120,6 +124,12 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(
                       height: 10.0,
                     ),
+<<<<<<< HEAD
+=======
+                    const Center(
+                      child: Text('Running on: '),
+                    ),
+>>>>>>> ebcb05f23b8657a6612638db84238e391cc014ae
                   ],
                 ),
               ),
