@@ -1,20 +1,20 @@
 import 'dart:convert';
 
-TransactionStatementResponse transactionStatementResponseFromJson(String str) =>
-    TransactionStatementResponse.fromJson(json.decode(str));
+StatementTransactionResponse statementTransactionResponseFromJson(String str) =>
+    StatementTransactionResponse.fromJson(json.decode(str));
 
-String transactionStatementResponseToJson(TransactionStatementResponse data) =>
+String statementTransactionResponseToJson(StatementTransactionResponse data) =>
     json.encode(data.toJson());
 
-class TransactionStatementResponse {
-  TransactionStatementResponse(
+class StatementTransactionResponse {
+  StatementTransactionResponse(
       {required this.status, required this.transaction});
 
   bool status;
   List<Transaction> transaction;
 
-  factory TransactionStatementResponse.fromJson(Map<String, dynamic> json) =>
-      TransactionStatementResponse(
+  factory StatementTransactionResponse.fromJson(Map<String, dynamic> json) =>
+      StatementTransactionResponse(
         status: json["status"],
         transaction: List<Transaction>.from(
             json["data"].map((x) => Transaction.fromJson(x))),

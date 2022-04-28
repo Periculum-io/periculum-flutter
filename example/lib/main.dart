@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
-import 'package:flutter_periculum/models/ExistingCreditScoreResponse.dart';
-import 'package:flutter_periculum/models/ExistingStatment.dart';
+import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/Statement.dart';
 
 void main() async {
   await dotenv.load();
@@ -22,11 +22,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  late ExisitingStatementResponse exisitingStatementResponse;
+  late StatementResponse statementResponse;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
-  late List<ExisitingCreditScoreResponse> creditResponse;
+  late List<CreditScoreResponse> creditResponse;
 
   @override
   void initState() {
@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
                                           setState(() {
                                             isLoading = false;
                                             _response = true;
-                                            exisitingStatementResponse = value;
+                                            statementResponse = value;
                                           }),
                                         });
                           } on PlatformException {
