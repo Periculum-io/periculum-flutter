@@ -5,6 +5,7 @@ import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 
 void main() async {
@@ -120,15 +121,30 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    InkWell(
-                      onTap: () async {
-                        await FlutterPericulum
-                            .attachCustomerIdentificationInfromation(
-                                token: '${dotenv.env['tokenKey']}',
-                                statementKey: '125');
-                      },
-                      child: Text('Clikedc'),
-                    )
+                    const Center(
+                      child: Text('Running on: '),
+                    ),
+                    ElevatedButton(
+                        onPressed: () async {
+                          IdentificationData data = IdentificationData(
+                              identifierName: 'BVN', value: '200');
+                          IdentificationData data2 = IdentificationData(
+                              identifierName: 'BVN', value: '200');
+                          CustomerIdentificationPayload payload =
+                              CustomerIdentificationPayload(
+                                  statementKey: 125,
+                                  identificationData: [
+                                data,
+                                data2,
+                              ]);
+                          await FlutterPericulum
+                              .attachCustomerIdentificationInfromation(
+                            token: "${dotenv.env['tokenKey']}",
+                            statementKey: '125',
+                            customerIdentificationPayload: payload,
+                          );
+                        },
+                        child: Text('attach customer Identification')),
                   ],
                 ),
               ),

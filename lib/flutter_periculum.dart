@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 import 'package:http/http.dart' as http;
@@ -165,34 +166,36 @@ class FlutterPericulum {
   static Future<dynamic> attachCustomerIdentificationInfromation({
     required String token,
     required String statementKey,
+    required CustomerIdentificationPayload customerIdentificationPayload,
   }) async {
     final uri = Uri.parse('$BASE_URL/statements/identification');
 
     var client = http.Client();
-    Map<String, dynamic> map;
     var response;
+    var payload =
+        customerIdentificationPayloadToJson(customerIdentificationPayload);
     try {
       response = await client.patch(
         uri,
-        body: jsonEncode({
-          "statementKey": 120,
-          "identificationData": [
-            {"IdentifierName": "bvn", "Value": "111"},
-            {"IdentifierName": "nin", "Value": "111"}
-          ]
+        body: json.encode({
+          // "statementKey": 120,
+          // "identificationData": [
+          //   {"IdentifierName": "bvn", "Value": "111"},
+          //   {"IdentifierName": "nin", "Value": "111"}
+          // ]
+          payload
         }),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
       );
+      debugPrint(payload);
       var result = response.statusCode;
 
-      // map = json.decode(result);
-      // CreditScoreResponse creditScoreResponse =
-      //     CreditScoreResponse.fromJson(map);
-      debugPrint(result);
-      return response.statusCode;
+      debugPrint(result.toString());
+
+      return result;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
     } catch (e) {
