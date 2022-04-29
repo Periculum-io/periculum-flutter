@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -22,7 +21,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _mobileData = 'Unknown';
-  late StatementResponse statement;
+  late StatementResponse statementResponse;
   late AffordabilityResponse affordabilityResponse;
   bool isLoading = false;
   bool _response = false;
@@ -41,16 +40,13 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    RaisedButton(
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.green,
+                    ElevatedButton(
                       onPressed: () async {
                         setState(() {
                           isLoading = true;
@@ -75,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                           isLoading = false;
                         });
                       },
-                      child: Text('Mobile Data Analysis'),
+                      child: const Text('Mobile Data Analysis'),
                     ),
                     const SizedBox(
                       height: 10.0,
@@ -86,10 +82,7 @@ class _MyAppState extends State<MyApp> {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    RaisedButton(
-                      padding: const EdgeInsets.all(20),
-                      textColor: Colors.white,
-                      color: Colors.green,
+                    ElevatedButton(
                       onPressed: () async {
                         setState(() {
                           isLoading = true;

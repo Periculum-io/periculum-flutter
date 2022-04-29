@@ -7,9 +7,11 @@ import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
+import 'package:http/http.dart' as http;
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
+  static const String BASE_URL = "https://api.insights-periculum.com";
 
   static Future<String> mobileDataAnalysis({
     required String token,
@@ -124,6 +126,37 @@ class FlutterPericulum {
           .toList();
 
       return responseList;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  static Future<CreditScoreResponse> generateCreditScore({
+    required String token,
+    required String statementKey,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/creditscore/$statementKey');
+
+    var client = http.Client();
+    Map<String, dynamic> map;
+    var response;
+    try {
+      response = await client.post(
+        uri,
+        body: jsonEncode({}),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      var result = response.body;
+
+      map = json.decode(result);
+      CreditScoreResponse creditScoreResponse =
+          CreditScoreResponse.fromJson(map);
+      return creditScoreResponse;
+    } on FormatException catch (_) {
+      throw const FormatException("Unable to process the data");
     } catch (e) {
       throw e.toString();
     }
