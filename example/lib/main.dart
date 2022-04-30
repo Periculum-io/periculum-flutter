@@ -5,7 +5,6 @@ import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 
 void main() async {
@@ -27,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   bool isLoading = false;
   bool _response = false;
   late List<CreditScoreResponse> creditResponse;
+  late List<AffordabilityResponse> listAfford;
 
   @override
   void initState() {
@@ -126,23 +126,16 @@ class _MyAppState extends State<MyApp> {
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          IdentificationData data = IdentificationData(
-                              identifierName: 'BVN', value: '200');
-                          IdentificationData data2 = IdentificationData(
-                              identifierName: 'BVN', value: '200');
-                          CustomerIdentificationPayload payload =
-                              CustomerIdentificationPayload(
-                                  statementKey: 125,
-                                  identificationData: [
-                                data,
-                                data2,
-                              ]);
-                          await FlutterPericulum
-                              .attachCustomerIdentificationInfromation(
-                            token: "${dotenv.env['tokenKey']}",
-                            statementKey: '125',
-                            customerIdentificationPayload: payload,
-                          );
+                          await FlutterPericulum.getAffordability(
+                              token: "${dotenv.env['tokenKey']}",
+                              statementKey: '125');
+
+                          // await FlutterPericulum
+                          //     .attachCustomerIdentificationInfromation(
+                          //   token: "${dotenv.env['tokenKey']}",
+                          //   statementKey: '125',
+                          //   customerIdentificationPayload: payload,
+                          // );
                         },
                         child: Text('attach customer Identification')),
                   ],

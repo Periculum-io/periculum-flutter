@@ -132,6 +132,28 @@ class FlutterPericulum {
     }
   }
 
+  static Future<List<AffordabilityResponse>> getAffordability({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getAffordability', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<AffordabilityResponse> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => AffordabilityResponse.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   static Future<CreditScoreResponse> generateCreditScore({
     required String token,
     required String statementKey,
@@ -156,46 +178,6 @@ class FlutterPericulum {
       CreditScoreResponse creditScoreResponse =
           CreditScoreResponse.fromJson(map);
       return creditScoreResponse;
-    } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
-    } catch (e) {
-      throw e.toString();
-    }
-  }
-
-  static Future<dynamic> attachCustomerIdentificationInfromation({
-    required String token,
-    required String statementKey,
-    required CustomerIdentificationPayload customerIdentificationPayload,
-  }) async {
-    final uri = Uri.parse('$BASE_URL/statements/identification');
-
-    var client = http.Client();
-    var response;
-    var payload =
-        customerIdentificationPayloadToJson(customerIdentificationPayload);
-    try {
-      response = await client.patch(
-        uri,
-        body: json.encode({
-          // "statementKey": 120,
-          // "identificationData": [
-          //   {"IdentifierName": "bvn", "Value": "111"},
-          //   {"IdentifierName": "nin", "Value": "111"}
-          // ]
-          payload
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      debugPrint(payload);
-      var result = response.statusCode;
-
-      debugPrint(result.toString());
-
-      return result;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
     } catch (e) {
