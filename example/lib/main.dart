@@ -129,15 +129,8 @@ class _MyAppState extends State<MyApp> {
                           await FlutterPericulum.getAffordability(
                               token: "${dotenv.env['tokenKey']}",
                               statementKey: '125');
-
-                          // await FlutterPericulum
-                          //     .attachCustomerIdentificationInfromation(
-                          //   token: "${dotenv.env['tokenKey']}",
-                          //   statementKey: '125',
-                          //   customerIdentificationPayload: payload,
-                          // );
                         },
-                        child: Text('attach customer Identification')),
+                        child: Text('Get affordability')),
                   ],
                 ),
               ),
