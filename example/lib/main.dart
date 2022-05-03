@@ -5,6 +5,7 @@ import 'package:flutter_periculum/flutter_periculum.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 
 void main() async {
@@ -126,9 +127,18 @@ class _MyAppState extends State<MyApp> {
                     ),
                     ElevatedButton(
                         onPressed: () async {
-                          await FlutterPericulum.getAffordability(
-                              token: "${dotenv.env['tokenKey']}",
-                              statementKey: '125');
+                          var data = IdentificationData(
+                              identifierName: 'bvn', value: '8678');
+                          var data2 = IdentificationData(
+                              identifierName: 'nin', value: '8678');
+                          await FlutterPericulum
+                              .attachCustomerIdentificationInfromation(
+                                  token: "${dotenv.env['tokenKey']}",
+                                  statementKey: '125',
+                                  customerIdentificationPayload:
+                                      CustomerIdentificationPayload(
+                                          statementKey: 125,
+                                          identificationData: [data, data2]));
                         },
                         child: Text('Get affordability')),
                   ],

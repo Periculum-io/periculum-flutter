@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 import 'package:http/http.dart' as http;
+
+import 'models/CustomerIdentificationPayload.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
@@ -178,6 +179,38 @@ class FlutterPericulum {
       CreditScoreResponse creditScoreResponse =
           CreditScoreResponse.fromJson(map);
       return creditScoreResponse;
+    } on FormatException catch (_) {
+      throw const FormatException("Unable to process the data");
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  static Future<dynamic> attachCustomerIdentificationInfromation({
+    required String token,
+    required String statementKey,
+    required CustomerIdentificationPayload customerIdentificationPayload,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/statements/identification');
+
+    var client = http.Client();
+    var response;
+    var payload = customerIdentificationPayload;
+    try {
+      response = await client.patch(
+        uri,
+        body: json.encode(payload),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      debugPrint(customerIdentificationPayloadToJson(payload).toString());
+      var result = response.statusCode;
+
+      debugPrint(result.toString());
+
+      return result;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
     } catch (e) {
