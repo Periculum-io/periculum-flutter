@@ -140,7 +140,7 @@ class _MyAppState extends State<MyApp> {
                                           statementKey: 125,
                                           identificationData: [data, data2]));
                         },
-                        child: Text('Get affordability')),
+                        child: Text('Patch Client Identification')),
                   ],
                 ),
               ),
