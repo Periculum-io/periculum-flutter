@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 import 'package:http/http.dart' as http;
@@ -123,6 +124,28 @@ class FlutterPericulum {
 
       responseList = (json.decode(response) as List)
           .map((i) => Transaction.fromJson(i))
+          .toList();
+
+      return responseList;
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  static Future<List<AffordabilityResponse>> getAffordability({
+    required String token,
+    required String statementKey,
+  }) async {
+    String response = await _channel.invokeMethod('getAffordability', {
+      'token': token,
+      'statementKey': statementKey,
+    });
+
+    try {
+      List<AffordabilityResponse> responseList;
+
+      responseList = (json.decode(response) as List)
+          .map((i) => AffordabilityResponse.fromJson(i))
           .toList();
 
       return responseList;

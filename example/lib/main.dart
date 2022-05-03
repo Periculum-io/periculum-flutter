@@ -26,6 +26,7 @@ class _MyAppState extends State<MyApp> {
   bool isLoading = false;
   bool _response = false;
   late List<CreditScoreResponse> creditResponse;
+  late List<AffordabilityResponse> listAfford;
 
   @override
   void initState() {
@@ -123,6 +124,13 @@ class _MyAppState extends State<MyApp> {
                     const Center(
                       child: Text('Running on: '),
                     ),
+                    ElevatedButton(
+                        onPressed: () async {
+                          await FlutterPericulum.getAffordability(
+                              token: "${dotenv.env['tokenKey']}",
+                              statementKey: '125');
+                        },
+                        child: Text('Get affordability')),
                   ],
                 ),
               ),
