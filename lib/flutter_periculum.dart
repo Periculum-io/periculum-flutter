@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,40 +55,61 @@ class FlutterPericulum {
     int? averageMonthlyTotalExpenses,
     int? averageMonthlyLoanRepaymentAmount,
   }) async {
-    Map<String, dynamic> map;
+    try {
+      Map<String, dynamic> map;
 
-    AffordabilityResponse affordabilityResponse;
-    String response =
-        await _channel.invokeMethod('generateAffordabilityAnalysis', {
-      'token': token,
-      'dti': dti,
-      'statementKey': statementKey,
-      'loanTenure': loanTenure,
-      'averageMonthlyTotalExpenses': averageMonthlyTotalExpenses,
-      'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
-    });
+      AffordabilityResponse affordabilityResponse;
+      String response =
+          await _channel.invokeMethod('generateAffordabilityAnalysis', {
+        'token': token,
+        'dti': dti,
+        'statementKey': statementKey,
+        'loanTenure': loanTenure,
+        'averageMonthlyTotalExpenses': averageMonthlyTotalExpenses,
+        'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
+      });
 
-    var result = json.decode(response);
-    map = json.decode(response);
-    affordabilityResponse = AffordabilityResponse.fromJson(map);
-    return affordabilityResponse;
+      var result = json.decode(response);
+      map = json.decode(response);
+      affordabilityResponse = AffordabilityResponse.fromJson(map);
+      return affordabilityResponse;
+    } on FormatException catch (_) {
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
-  static Future<StatementResponse> statementAnalytics({
+  static Future<StatementResponse> getStatementAnalytics({
     required String token,
     required String statementKey,
   }) async {
-    Map<String, dynamic> map;
-    String response = await _channel.invokeMethod('getStatementAnalytics', {
-      'token': token,
-      'statementKey': statementKey,
-    });
+    try {
+      Map<String, dynamic> map;
+      String response = await _channel.invokeMethod('getStatementAnalytics', {
+        'token': token,
+        'statementKey': statementKey,
+      });
 
-    map = json.decode(response);
-    StatementResponse exisitingStatementResponse =
-        StatementResponse.fromJson(map);
-    debugPrint(exisitingStatementResponse.name);
-    return exisitingStatementResponse;
+      map = json.decode(response);
+      StatementResponse exisitingStatementResponse =
+          StatementResponse.fromJson(map);
+      return exisitingStatementResponse;
+    } on FormatException catch (_) {
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
   }
 
   static Future<List<CreditScoreResponse>> getExisitingCreditScore({
@@ -106,8 +129,15 @@ class FlutterPericulum {
           .toList();
 
       return responseList;
+    } on FormatException catch (_) {
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
     } catch (e) {
-      throw '{"status": false, "error": ${e.toString()}}';
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -126,10 +156,16 @@ class FlutterPericulum {
       responseList = (json.decode(response) as List)
           .map((i) => Transaction.fromJson(i))
           .toList();
-
       return responseList;
+    } on FormatException catch (_) {
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
     } catch (e) {
-      throw e.toString();
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -150,8 +186,15 @@ class FlutterPericulum {
           .toList();
 
       return responseList;
+    } on FormatException catch (_) {
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
     } catch (e) {
-      throw e.toString();
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -180,9 +223,14 @@ class FlutterPericulum {
           CreditScoreResponse.fromJson(map);
       return creditScoreResponse;
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
     } catch (e) {
-      throw e.toString();
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -208,13 +256,16 @@ class FlutterPericulum {
       debugPrint(customerIdentificationPayloadToJson(payload).toString());
       var result = response.statusCode;
 
-      debugPrint(result.toString());
-
       return result;
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      log("FormatException: Check the input data");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
     } catch (e) {
-      throw e.toString();
+      log(e.toString());
+      rethrow;
     }
   }
 }

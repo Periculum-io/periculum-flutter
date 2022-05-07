@@ -18,10 +18,9 @@ dependencies:
 ## Example
 ...dart
 ```
-        var response;
+        AffordabilityResponse response; //returns an AffordabilityResponse object 
 
         try {
-
           response = await FlutterPericulum.affordabilityAnalysis(
               statementKey: 3,
               dti: 2.0,
@@ -41,8 +40,107 @@ dependencies:
 
         final body = jsonDecode(response.toString());
 ```
-...
+## Generate Credit Score
+...dart
+```
+CreditScoreResponse response; //returns an CreditScoreResponse object 
 
+try {
+  response =
+    await FlutterPericulum.generateCreditScore(
+    token: "${dotenv.env['tokenKey']}",
+    statementKey: '125',
+  );
+} catch (e) {
+   log(e.toString());
+}
+```
+
+## Get Existing Credit Score
+...dart
+```
+List<CreditScoreResponse> response; //returns an List<CreditScoreResponse> object 
+
+try {
+  response =
+    await FlutterPericulum.getExisitingCreditScore(
+    token: "${dotenv.env['tokenKey']}",
+    statementKey: '125',
+  );
+} catch (e) {
+   //handle exceptions
+}
+```
+## Get Statement Transactions
+...dart
+```
+List<Transaction> response; //returns an List<Transaction> object 
+
+try {
+  response =
+    await FlutterPericulum.getStatementTransaction(
+    token: "${dotenv.env['tokenKey']}",
+    statementKey: '125',
+  );
+} catch (e) {
+   //handle exceptions
+}
+```
+
+## Get Existing Statement Analytics
+...dart
+```
+StatementResponse response; //returns an StatementResponse object 
+
+
+try {
+  response =
+    await FlutterPericulum.getStatementAnalytics(
+    token: "${dotenv.env['tokenKey']}",
+    statementKey: '125',
+  );
+} catch (e) {
+   //handle exceptions
+}
+```
+
+## Get Existing Statement Affordability Analysis
+...dart
+```
+List<AffordabilityResponse> response; //returns an List<AffordabilityResponse> object 
+
+try {
+  response =
+    await FlutterPericulum.getAffordability(
+    token: "${dotenv.env['tokenKey']}",
+    statementKey: '125',
+  );
+} catch (e) {
+   //handle exceptions
+}
+```
+
+## Attach Customer Identification Information To A Statement
+...dart
+```
+var response; //returns the statusCode
+onPressed: () async {
+  var data = IdentificationData(
+      identifierName: 'bvn', value: '8678');
+  var data2 = IdentificationData(
+      identifierName: 'nin', value: '8678');
+  response = await FlutterPericulum
+      .attachCustomerIdentificationInfromation(
+          token: "${dotenv.env['tokenKey']}",
+          statementKey: '125',
+          customerIdentificationPayload:
+              CustomerIdentificationPayload(
+                  statementKey: 125,
+                  identificationData: [data, data2]));
+},
+```
+
+...
 ## Compatibility
 Minimum Android SDK: `Periculum requires a minimum API level of 21.`
 
