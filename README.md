@@ -16,8 +16,8 @@ dependencies:
 `import 'package:flutter_periculum/flutter_periculum.dart';`
 
 ## Generate Affordability 
-...dart
-```
+
+```dart
 AffordabilityResponse response; //returns an AffordabilityResponse object 
 try {
   response = await FlutterPericulum.affordabilityAnalysis(
