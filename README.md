@@ -1,4 +1,7 @@
 # flutter_periculum
+<p align="center">
+    <img title="Flutterwave" height="200" src="https://www.periculum.io/wp-content/uploads/2020/11/logo1.png" width="50%"/>
+</p>
 
 Periculum Insight Plugin (Flutter)
 This plugin allows Flutter apps to generate Mobile Data Analysis and Affordability Analysis.
