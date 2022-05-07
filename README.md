@@ -15,34 +15,34 @@ dependencies:
 
 `import 'package:flutter_periculum/flutter_periculum.dart';`
 
-## Example
+## Generate Affordability 
 ...dart
 ```
-        AffordabilityResponse response; //returns an AffordabilityResponse object 
-
-        try {
-          response = await FlutterPericulum.affordabilityAnalysis(
-              statementKey: 3,
-              dti: 2.0,
-              loanTenure: 30,
-              averageMonthlyTotalExpenses: 4000, //optional
-              averageMonthlyLoanRepaymentAmount: 1000, //optional
-              token: "..."
-              );
-
-        } on PlatformException {
-
-          response = 'Failed to get platform version.';
-
-        }
-
-        if (!mounted) return;
-
-        final body = jsonDecode(response.toString());
+AffordabilityResponse response; //returns an AffordabilityResponse object 
+try {
+  response = await FlutterPericulum.affordabilityAnalysis(
+      statementKey: 3,
+      dti: 2.0,
+      loanTenure: 30,
+      averageMonthlyTotalExpenses: 4000, //optional
+      averageMonthlyLoanRepaymentAmount: 1000, //optional
+      token: "..."
+      );
+} on PlatformException {
+  response = 'Failed to get platform version.';
+}
+if (!mounted) return;
 ```
 ## Generate Credit Score
-...dart
-```
+
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `statementKey` | `String` | **required** |
+
+
+```dart
 CreditScoreResponse response; //returns an CreditScoreResponse object 
 
 try {
@@ -57,8 +57,14 @@ try {
 ```
 
 ## Get Existing Credit Score
-...dart
-```
+
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `statementKey` | `String` | **required** |
+
+```dart
 List<CreditScoreResponse> response; //returns an List<CreditScoreResponse> object 
 
 try {
@@ -72,8 +78,14 @@ try {
 }
 ```
 ## Get Statement Transactions
-...dart
-```
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `statementKey` | `String` | **required** |
+
+
+```dart
 List<Transaction> response; //returns an List<Transaction> object 
 
 try {
@@ -88,8 +100,14 @@ try {
 ```
 
 ## Get Existing Statement Analytics
-...dart
-```
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `statementKey` | `String` | **required** |
+
+
+```dart
 StatementResponse response; //returns an StatementResponse object 
 
 
@@ -105,8 +123,13 @@ try {
 ```
 
 ## Get Existing Statement Affordability Analysis
-...dart
-```
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `statementKey` | `String` | **required** |
+
+```dart
 List<AffordabilityResponse> response; //returns an List<AffordabilityResponse> object 
 
 try {
@@ -121,8 +144,14 @@ try {
 ```
 
 ## Attach Customer Identification Information To A Statement
-...dart
-```
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `token` | `String` | **required** |
+| `customerIdentificationPayload` | `CustomerIdentificationPayload` | **required** |
+
+
+```dart
 var response; //returns the statusCode
 onPressed: () async {
   var data = IdentificationData(
