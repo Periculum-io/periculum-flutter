@@ -39,7 +39,7 @@ try {
       loanTenure: 30,
       averageMonthlyTotalExpenses: 4000, //optional
       averageMonthlyLoanRepaymentAmount: 1000, //optional
-      token: "..." [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28)
+      token: "..." [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication)
       );
 } on PlatformException {
   response = 'Failed to get platform version.';
@@ -51,7 +51,7 @@ if (!mounted) return;
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `statementKey` | `String` | **required** |
 
 
@@ -74,7 +74,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `statementKey` | `String` | **required** |
 
 ```dart
@@ -94,7 +94,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `statementKey` | `String` | **required** |
 
 
@@ -116,7 +116,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `statementKey` | `String` | **required** |
 
 
@@ -139,7 +139,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `statementKey` | `String` | **required** |
 
 ```dart
@@ -160,7 +160,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/edit/docs_refactor/README.md?plain=1#L20-L28) |
+| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
 | `customerIdentificationPayload` | `CustomerIdentificationPayload` | **required** |
 
 
