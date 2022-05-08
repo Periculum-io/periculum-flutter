@@ -17,6 +17,16 @@ dependencies:
 2. Import  the plugin and use it in your flutter App.0
 
 `import 'package:flutter_periculum/flutter_periculum.dart';`
+## Authentication
+
+Your app must first identify and authorize itself against an authorization server by getting an access token before using any of Insights endpoints. For security concerns, make sure that the entire process of obtaining a token takes place on a remote server. So, once you've gotten the token from your server, you can utilize it to get analytics or affordability information by giving it into the token parameter.
+
+To authenticate against the authorization server, make sure you have Periculum's client id and client secret. Your app will not be able to receive an access token and call endpoints on the Insights API without these. If you have not received your client id or client secret, please contact Periculum's usual support channel (email support@periculum.io).
+
+Visit https://www.periculum.io/documentation/insights/#authenticationrequest for further information. 
+
+![Authorization process](https://github.com/AshaluwalaKazeem/Periculum/blob/master/auth.png)
+
 
 ## Generate Affordability 
 
@@ -29,7 +39,7 @@ try {
       loanTenure: 30,
       averageMonthlyTotalExpenses: 4000, //optional
       averageMonthlyLoanRepaymentAmount: 1000, //optional
-      token: "..."
+      token: "..." // [Get token](https://github.com/git/git/blob/master/README.md?plain=1#L20-L28)
       );
 } on PlatformException {
   response = 'Failed to get platform version.';
@@ -41,7 +51,7 @@ if (!mounted) return;
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `statementKey` | `String` | **required** |
 
 
@@ -51,11 +61,11 @@ CreditScoreResponse response; //returns an CreditScoreResponse object
 try {
   response =
     await FlutterPericulum.generateCreditScore(
-    token: "${dotenv.env['tokenKey']}",
+    token: "" //get token from authentication,
     statementKey: '125',
   );
 } catch (e) {
-   log(e.toString());
+   //handle exceptions
 }
 ```
 
@@ -64,7 +74,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `statementKey` | `String` | **required** |
 
 ```dart
@@ -73,7 +83,7 @@ List<CreditScoreResponse> response; //returns an List<CreditScoreResponse> objec
 try {
   response =
     await FlutterPericulum.getExisitingCreditScore(
-    token: "${dotenv.env['tokenKey']}",
+    token: "", //get token from authentication 
     statementKey: '125',
   );
 } catch (e) {
@@ -84,7 +94,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `statementKey` | `String` | **required** |
 
 
@@ -94,7 +104,7 @@ List<Transaction> response; //returns an List<Transaction> object
 try {
   response =
     await FlutterPericulum.getStatementTransaction(
-    token: "${dotenv.env['tokenKey']}",
+    token: "" //get token from authentication,
     statementKey: '125',
   );
 } catch (e) {
@@ -106,7 +116,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `statementKey` | `String` | **required** |
 
 
@@ -117,7 +127,7 @@ StatementResponse response; //returns an StatementResponse object
 try {
   response =
     await FlutterPericulum.getStatementAnalytics(
-    token: "${dotenv.env['tokenKey']}",
+    token: "" //get token from authentication,
     statementKey: '125',
   );
 } catch (e) {
@@ -129,7 +139,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `statementKey` | `String` | **required** |
 
 ```dart
@@ -138,7 +148,7 @@ List<AffordabilityResponse> response; //returns an List<AffordabilityResponse> o
 try {
   response =
     await FlutterPericulum.getAffordability(
-    token: "${dotenv.env['tokenKey']}",
+    token: "" //get token from authentication,
     statementKey: '125',
   );
 } catch (e) {
@@ -150,7 +160,7 @@ try {
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** |
+| `token` | `String` | **required**  Refer to authentication for Token |
 | `customerIdentificationPayload` | `CustomerIdentificationPayload` | **required** |
 
 
@@ -163,7 +173,7 @@ onPressed: () async {
       identifierName: 'nin', value: '8678');
   response = await FlutterPericulum
       .attachCustomerIdentificationInfromation(
-          token: "${dotenv.env['tokenKey']}",
+          token: "" //get token from authentication,
           statementKey: '125',
           customerIdentificationPayload:
               CustomerIdentificationPayload(
