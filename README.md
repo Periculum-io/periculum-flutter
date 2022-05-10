@@ -27,6 +27,20 @@ Visit https://www.periculum.io/documentation/insights/#authenticationrequest for
 
 ![Authorization process](https://github.com/AshaluwalaKazeem/Periculum/blob/master/auth.png)
 
+1. Customer phone app authenticates with customer backend server.
+2. Customer backend server should return a valid access token. 
+...2a. If the customer backend server has not obtained an access token, then it should make a call with the customer's client credentials to the authorization server and obtain an access token. 
+...2ai. The customer backend server should cache the access token. 
+...2b. If the customer backend server has an existing cached access token that has not expired, then it should return the cached token. 
+...2bi. If the customer access token is near expiry (5-15 minutes before expiry), then it should obtain a new access token with its client credentials.
+3. The access token is either retrieved from the authorization server or the cache.
+4. The customer backend server returns the access token to the customer's mobile app.
+5. The customer's mobile app can now make an SDK call to submit mobile phone data using the access token.
+6. The SDK method will call the Insights API with the access token.
+   7 & 8. Insights API will validate the token.
+9. Insights API will return the response to the SDK method.
+10. The SDK method will return the response back to the customer mobile app.
+
 
 ## Generate Affordability 
 
