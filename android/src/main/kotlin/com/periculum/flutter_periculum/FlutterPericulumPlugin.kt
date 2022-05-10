@@ -677,30 +677,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         return current;
     }
 
-    private fun postRequest() {
-        val url = "https://jsonplaceholder.typicode.com/posts/1"
-
-        val JSON = "application/json; charset=utf-8".toMediaType()
-
-        val JSONObjectString =
-            "{'userId': 1,'id': 1,'title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit', 'body': 'quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto'}" 
-
-        var body: RequestBody = RequestBody.create(JSON, JSONObjectString)
-        val request = Request.Builder().post(body).url(url).build()
-        val client = OkHttpClient()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call, response: Response) {
-                val tm = response.body!!.string()
-                println(tm)
-                Log.d("Success", tm)
-            }
-
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("Failed", "FAILED")
-                e.printStackTrace()
-            }
-        })
-    }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         myplugin.context = binding.activity

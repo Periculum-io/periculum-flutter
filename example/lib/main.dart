@@ -60,7 +60,6 @@ class _MyAppState extends State<MyApp> {
                         setState(() {
                           isLoading = true;
                         });
-
                         var response;
                         try {
                           response = await FlutterPericulum.mobileDataAnalysis(
