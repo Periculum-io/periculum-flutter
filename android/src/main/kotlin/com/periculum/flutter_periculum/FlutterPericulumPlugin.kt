@@ -172,7 +172,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     }
 
                     override fun onFailure(call: Call, e: IOException) {
-                        val error = e.message
+                        val error: String? = e.message
                         result.success("{\"title\": \"${error}\"}")
                     }
                 })
@@ -316,6 +316,8 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             val JSON = "application/json; charset=utf-8".toMediaType()
 
                             var body: RequestBody = RequestBody.create(JSON, jsonInString)
+
+                            Log.d("Request body", jsonInString)
                             val request = Request.Builder()
                                 .addHeader("Authorization", "Bearer $token")
                                 .post(body)
@@ -325,7 +327,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             client.newCall(request).enqueue(object : Callback {
                                 override fun onResponse(call: Call, response: Response) {
                                     val tm = response.body!!.string()
-                    
                                     result.success(tm)
                                 }
 

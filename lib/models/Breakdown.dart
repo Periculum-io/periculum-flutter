@@ -10,10 +10,10 @@ class Breakdown {
   num percentageOfTransactionsInBucket;
 
   factory Breakdown.fromJson(Map<String, dynamic> json) => Breakdown(
-        min: json["min"].toDouble(),
-        max: json["max"].toDouble(),
+        min: json["min"],
+        max: json["max"],
         percentageOfTransactionsInBucket:
-            json["percentageOfTransactionsInBucket"].toDouble(),
+            json["percentageOfTransactionsInBucket"],
       );
 
   Map<String, dynamic> toJson() => {

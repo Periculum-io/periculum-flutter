@@ -33,20 +33,20 @@ class CashFlowAnalysis {
 
   factory CashFlowAnalysis.fromJson(Map<String, dynamic> json) =>
       CashFlowAnalysis(
-        totalCreditTurnover: json["totalCreditTurnover"].toDouble(),
-        totalDebitTurnOver: json["totalDebitTurnOver"].toDouble(),
-        averageMonthlyCredits: json["averageMonthlyCredits"].toDouble(),
-        averageMonthlyDebits: json["averageMonthlyDebits"].toDouble(),
-        averageWeeklyCredits: json["averageWeeklyCredits"].toDouble(),
-        averageWeeklyDebits: json["averageWeeklyDebits"].toDouble(),
-        averageMonthlyBalance: json["averageMonthlyBalance"].toDouble(),
-        averageWeeklyBalance: json["averageWeeklyBalance"].toDouble(),
+        totalCreditTurnover: json["totalCreditTurnover"],
+        totalDebitTurnOver: json["totalDebitTurnOver"],
+        averageMonthlyCredits: json["averageMonthlyCredits"],
+        averageMonthlyDebits: json["averageMonthlyDebits"],
+        averageWeeklyCredits: json["averageWeeklyCredits"],
+        averageWeeklyDebits: json["averageWeeklyDebits"],
+        averageMonthlyBalance: json["averageMonthlyBalance"],
+        averageWeeklyBalance: json["averageWeeklyBalance"],
         numberOfTransactingMonths: json["numberOfTransactingMonths"],
         periodInStatement: json["periodInStatement"],
         yearInStatement: json["yearInStatement"],
         firstDateInStatement: DateTime.parse(json["firstDateInStatement"]),
         lastDateInStatement: DateTime.parse(json["lastDateInStatement"]),
-        closingBalance: json["closingBalance"].toDouble(),
+        closingBalance: json["closingBalance"],
       );
 
   Map<String, dynamic> toJson() => {

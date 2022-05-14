@@ -28,7 +28,7 @@ class IncomeAnalysis {
   String mostRecentSalary;
 
   factory IncomeAnalysis.fromJson(Map<String, dynamic> json) => IncomeAnalysis(
-        averagePredictedSalary: json["averagePredictedSalary"].toDouble(),
+        averagePredictedSalary: json["averagePredictedSalary"],
         isSalaryEarner: json["isSalaryEarner"],
         expectedSalaryPaymentDay: json["expectedSalaryPaymentDay"],
         frequencyOfSalaryPayments: json["frequencyOfSalaryPayments"],

@@ -7,7 +7,8 @@
         {
             "name": "periculum-flutter",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "program": "/Users/mac/Desktop/periculum_gig/periculum-flutter/example/lib/main.dart"
         },
         {
             "name": "periculum-flutter (profile mode)",
