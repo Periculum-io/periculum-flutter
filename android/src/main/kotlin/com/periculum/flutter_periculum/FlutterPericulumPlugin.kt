@@ -317,7 +317,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                             var body: RequestBody = RequestBody.create(JSON, jsonInString)
 
-                            Log.d("Request body", jsonInString)
                             val request = Request.Builder()
                                 .addHeader("Authorization", "Bearer $token")
                                 .post(body)

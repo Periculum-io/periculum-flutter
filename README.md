@@ -42,6 +42,35 @@ Visit https://www.periculum.io/documentation/insights/#authenticationrequest for
 10. The SDK method will return the response back to the customer mobile app.
 
 
+#### Required Permission 
+The following permission (LOCATION, SMS and WIFI) are required to be requested in the AndroidManifest.xml from the Android device before make the making calling `FlutterPericulum.mobileDataAnalysis` . 
+
+```xml
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
+  <uses-permission android:name="android.permission.READ_SMS" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.INTERNET"/> //Internet permission is generally required
+```
+
+
+## Generate Mobile Analysis
+```dart
+try {
+  response = await FlutterPericulum.mobileDataAnalysis(
+      phoneNumber: "08023456789",
+      bvn: "12345678901",
+      token: "Ebter Access token");
+  setState(() {
+    responseOutput =
+        "GenerateMobileAnalysis -> $response"; //Returns a string of Array of mobile Analysis.
+  });
+} catch (e){
+  //handle exception 
+}
+```
+
 ## Generate Affordability 
 
 ```dart
