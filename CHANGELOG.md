@@ -11,10 +11,10 @@ Updated Affordabilily Analysis to include optional averageMonthlyTotalExpenses a
 ## 0.0.3 - 2022-05-14
 
 Update the package with new features:
-Generate Credit Score 
-Get Existing Credit Score
-Get Statement Transaction 
-Get Statement Analysis
-Get Existing Affordabilit Statement
-Add Clients Identification to Statement
+* Generate Credit Score 
+* Get Existing Credit Score
+* Get Statement Transaction 
+* Get Statement Analysis
+* Get Existing Affordabilit Statement
+* Add Clients Identification to Statement
 
