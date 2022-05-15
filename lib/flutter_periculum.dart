@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 import 'package:http/http.dart' as http;
@@ -23,28 +24,26 @@ class FlutterPericulum {
     String? bvn,
     String? statementName,
   }) async {
-    Map<String, dynamic> myresponse;
-
-    final String response =
-        await _channel.invokeMethod('generateMobileDataAnalysis', {
-      'phoneNumber': phoneNumber,
-      "bvn": bvn,
-      'statementName': statementName,
-      "token": token,
-    });
-
-    var result = jsonDecode(response);
-
-    if (result != null) {
-      myresponse = {"status": true, "data": response};
-    } else {
-      myresponse = {
-        "status": false,
-        "msg": result["title"],
-      };
+    try {
+      final String response =
+          await _channel.invokeMethod('generateMobileDataAnalysis', {
+        'phoneNumber': phoneNumber,
+        "bvn": bvn,
+        'statementName': statementName,
+        "token": token,
+      });
+      return response;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token");
+      rethrow;
+    } on HttpException catch (e) {
+      log(e.message);
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
     }
-
-    return jsonEncode(myresponse).toString();
+    // debugPrint(response);
   }
 
   static Future<AffordabilityResponse> affordabilityAnalysis({
@@ -74,7 +73,7 @@ class FlutterPericulum {
       affordabilityResponse = AffordabilityResponse.fromJson(map);
       return affordabilityResponse;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -101,7 +100,7 @@ class FlutterPericulum {
           StatementResponse.fromJson(map);
       return exisitingStatementResponse;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -130,7 +129,7 @@ class FlutterPericulum {
 
       return responseList;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -158,7 +157,7 @@ class FlutterPericulum {
           .toList();
       return responseList;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -187,7 +186,7 @@ class FlutterPericulum {
 
       return responseList;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -223,7 +222,7 @@ class FlutterPericulum {
           CreditScoreResponse.fromJson(map);
       return creditScoreResponse;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");
@@ -258,7 +257,7 @@ class FlutterPericulum {
 
       return result;
     } on FormatException catch (_) {
-      log("FormatException: Check the input data");
+      log("FormatException: Invalid Acccess Token or Statement Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");

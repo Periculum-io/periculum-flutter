@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
 import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
+import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
 
@@ -32,6 +33,7 @@ class _MyAppState extends State<MyApp> {
   late List<CreditScoreResponse>? creditResponseList;
   late List<Transaction>? listStatementTransaction;
   late List<AffordabilityResponse>? listAfford;
+  late List<MobileAnalysisResponse>? mobileAnalysisResponse;
   bool isLoading = false;
   bool _response = false;
   String responseOutput = "";
@@ -66,6 +68,10 @@ class _MyAppState extends State<MyApp> {
                               phoneNumber: "08023456789",
                               bvn: "12345678901",
                               token: "${dotenv.env['tokenKey']}");
+                          setState(() {
+                            responseOutput =
+                                "GenerateMobileAnalysis -> $response";
+                          });
                         } on PlatformException {
                           setState(() {
                             _mobileData = response;

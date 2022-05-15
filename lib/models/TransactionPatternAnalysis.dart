@@ -67,39 +67,33 @@ class TransactionPatternAnalysis {
       TransactionPatternAnalysis(
         lastDayOfCredit: DateTime.parse(json["lastDayOfCredit"]),
         lastDayOfDebit: DateTime.parse(json["lastDayOfDebit"]),
-        percentDebitTransactions: json["percentDebitTransactions"].toDouble(),
-        percentCreditTransactions: json["percentCreditTransactions"].toDouble(),
+        percentDebitTransactions: json["percentDebitTransactions"],
+        percentCreditTransactions: json["percentCreditTransactions"],
         totalNumberOfTransactions: json["totalNumberOfTransactions"],
         percentOfTransactionsLessThan10ThousandNaira:
-            json["percentOfTransactionsLessThan10ThousandNaira"].toDouble(),
+            json["percentOfTransactionsLessThan10ThousandNaira"],
         percentOfTransactionsBetween10ThousandTo100ThousandNaira:
-            json["percentOfTransactionsBetween10ThousandTo100ThousandNaira"]
-                .toDouble(),
+            json["percentOfTransactionsBetween10ThousandTo100ThousandNaira"],
         percentOfTransactionsBetween100ThousandTo500ThousandNaira:
-            json["percentOfTransactionsBetween100ThousandTo500ThousandNaira"]
-                .toDouble(),
+            json["percentOfTransactionsBetween100ThousandTo500ThousandNaira"],
         percentOfTransactionsBetween500ThousandToOneMillionNaira:
             json["percentOfTransactionsBetween500ThousandToOneMillionNaira"],
         percentOfTransactionsGreaterThanOneMillionNaira:
             json["percentOfTransactionsGreaterThanOneMillionNaira"],
         percentNumberOfDaysTransactionsWasLessThan10ThousandNaira:
-            json["percentNumberOfDaysTransactionsWasLessThan10ThousandNaira"]
-                .toDouble(),
+            json["percentNumberOfDaysTransactionsWasLessThan10ThousandNaira"],
         percentOfBalancesLessThan10ThousandNaira:
-            json["percentOfBalancesLessThan10ThousandNaira"].toDouble(),
+            json["percentOfBalancesLessThan10ThousandNaira"],
         percentOfBalancesBetween10ThousandTo100ThousandNaira:
-            json["percentOfBalancesBetween10ThousandTo100ThousandNaira"]
-                .toDouble(),
+            json["percentOfBalancesBetween10ThousandTo100ThousandNaira"],
         percentOfBalancesBetween100ThousandTo500ThousandNaira:
-            json["percentOfBalancesBetween100ThousandTo500ThousandNaira"]
-                .toDouble(),
+            json["percentOfBalancesBetween100ThousandTo500ThousandNaira"],
         percentOfBalancesBetween500ThousandToOneMillionNaira:
             json["percentOfBalancesBetween500ThousandToOneMillionNaira"],
         percentOfBalancesGreaterThanOneMillionNaira:
             json["percentOfBalancesGreaterThanOneMillionNaira"],
         percentNumberOfDaysBalanceWasLessThan10ThousandNaira:
-            json["percentNumberOfDaysBalanceWasLessThan10ThousandNaira"]
-                .toDouble(),
+            json["percentNumberOfDaysBalanceWasLessThan10ThousandNaira"],
         mostFrequentBalanceRange: json["mostFrequentBalanceRange"],
         mostFrequentTransactionRange: json["mostFrequentTransactionRange"],
         numberOfCardRequests: json["numberOfCardRequests"],
@@ -113,9 +107,9 @@ class TransactionPatternAnalysis {
         transactionBreakdown: List<Breakdown>.from(
             json["transactionBreakdown"].map((x) => Breakdown.fromJson(x))),
         percentNumberOfDaysTransactionsInSmallestBucket:
-            json["percentNumberOfDaysTransactionsInSmallestBucket"].toDouble(),
+            json["percentNumberOfDaysTransactionsInSmallestBucket"],
         percentNumberOfDaysBalancesInSmallestBucket:
-            json["percentNumberOfDaysBalancesInSmallestBucket"].toDouble(),
+            json["percentNumberOfDaysBalancesInSmallestBucket"],
       );
 
   Map<String, dynamic> toJson() => {

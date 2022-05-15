@@ -51,65 +51,63 @@ class SpendAnalysis {
     required this.mostFrequentExpenseAmount,
   });
 
-  num averageMonthlySpendOnTransfer;
-  num averageMonthlySpendOnAtmAndPos;
-  num averageMonthlySpendOnUssd;
-  num averageMonthlySpendOnGambling;
-  num averageMonthlySpendOnAirtimeAndData;
-  num averageMonthlySpendOnUtilities;
-  num averageMonthlySpendOnOnlineAndWeb;
-  num averageMonthlySpendOnTransportation;
-  num averageMonthlySpendOnHealth;
-  num averageMonthlySpendOnTravel;
-  num averageMonthlySpendOnEntertainment;
-  num averageMonthlySpendOnHospitalityAndFood;
-  num averageMonthlySpendOnRent;
-  num averageMonthlySpendOnInsurance;
-  num averageMonthlySpendOnChargesAndStampDuty;
-  num averageMonthlySpendOnInternationalTransactions;
-  num averageMonthlyTotalExpenses;
-  num averageMonthlyRecurringExpense;
-  num averageMonthlySpendOnSavingsAndInvestments;
-  num averageMonthlySpendOnOthers;
-  String mostRecurringExpense;
-  num totalSpendOnTransfer;
-  num totalSpendOnAtmAndPos;
-  num totalSpendOnUssd;
-  num totalSpendOnGambling;
-  num totalSpendOnAirtimeAndData;
-  num totalSpendOnUtilities;
-  num totalSpendOnOnlineAndWeb;
-  num totalSpendOnTransportation;
-  num totalSpendOnHealth;
-  num totalSpendOnTravel;
-  num totalSpendOnEntertainment;
-  num totalSpendOnHospitalityAndFood;
-  num totalSpendOnRent;
-  num totalSpendOnInsurance;
-  num totalSpendOnChargesAndStampDuty;
-  num totalSpendOnInternationalTransactions;
-  num totalMonthlyExpenses;
-  num totalRecurringExpense;
-  num totalExpenses;
-  num totalMonthlyExpense;
-  num totalSpendOnSavingsAndInvestments;
-  num totalSpendOnOthers;
-  List<String> atmLocations;
-  String mostFrequentSpendCategory;
-  String monthWithHighestSpend;
-  num highestSpend;
-  String mostFrequentExpense;
-  num mostFrequentExpenseAmount;
+  num? averageMonthlySpendOnTransfer;
+  num? averageMonthlySpendOnAtmAndPos;
+  num? averageMonthlySpendOnUssd;
+  num? averageMonthlySpendOnGambling;
+  num? averageMonthlySpendOnAirtimeAndData;
+  num? averageMonthlySpendOnUtilities;
+  num? averageMonthlySpendOnOnlineAndWeb;
+  num? averageMonthlySpendOnTransportation;
+  num? averageMonthlySpendOnHealth;
+  num? averageMonthlySpendOnTravel;
+  num? averageMonthlySpendOnEntertainment;
+  num? averageMonthlySpendOnHospitalityAndFood;
+  num? averageMonthlySpendOnRent;
+  num? averageMonthlySpendOnInsurance;
+  num? averageMonthlySpendOnChargesAndStampDuty;
+  num? averageMonthlySpendOnInternationalTransactions;
+  num? averageMonthlyTotalExpenses;
+  num? averageMonthlyRecurringExpense;
+  num? averageMonthlySpendOnSavingsAndInvestments;
+  num? averageMonthlySpendOnOthers;
+  String? mostRecurringExpense;
+  num? totalSpendOnTransfer;
+  num? totalSpendOnAtmAndPos;
+  num? totalSpendOnUssd;
+  num? totalSpendOnGambling;
+  num? totalSpendOnAirtimeAndData;
+  num? totalSpendOnUtilities;
+  num? totalSpendOnOnlineAndWeb;
+  num? totalSpendOnTransportation;
+  num? totalSpendOnHealth;
+  num? totalSpendOnTravel;
+  num? totalSpendOnEntertainment;
+  num? totalSpendOnHospitalityAndFood;
+  num? totalSpendOnRent;
+  num? totalSpendOnInsurance;
+  num? totalSpendOnChargesAndStampDuty;
+  num? totalSpendOnInternationalTransactions;
+  num? totalMonthlyExpenses;
+  num? totalRecurringExpense;
+  num? totalExpenses;
+  num? totalMonthlyExpense;
+  num? totalSpendOnSavingsAndInvestments;
+  num? totalSpendOnOthers;
+  List<String>? atmLocations;
+  String? mostFrequentSpendCategory;
+  String? monthWithHighestSpend;
+  num? highestSpend;
+  String? mostFrequentExpense;
+  num? mostFrequentExpenseAmount;
 
   factory SpendAnalysis.fromJson(Map<String, dynamic> json) => SpendAnalysis(
-        averageMonthlySpendOnTransfer:
-            json["averageMonthlySpendOnTransfer"].toDouble(),
-        averageMonthlySpendOnAtmAndPos:
-            json["averageMonthlySpendOnAtmAndPOS"].toDouble(),
+        averageMonthlySpendOnTransfer: json["averageMonthlySpendOnTransfer"],
+        averageMonthlySpendOnAtmAndPos: json["averageMonthlySpendOnAtmAndPOS"],
         averageMonthlySpendOnUssd: json["averageMonthlySpendOnUSSD"],
         averageMonthlySpendOnGambling: json["averageMonthlySpendOnGambling"],
         averageMonthlySpendOnAirtimeAndData:
-            json["averageMonthlySpendOnAirtimeAndData"].toDouble(),
+            json["averageMonthlySpendOnAirtimeAndData"],
         averageMonthlySpendOnUtilities: json["averageMonthlySpendOnUtilities"],
         averageMonthlySpendOnOnlineAndWeb:
             json["averageMonthlySpendOnOnlineAndWeb"],
@@ -124,20 +122,17 @@ class SpendAnalysis {
         averageMonthlySpendOnRent: json["averageMonthlySpendOnRent"],
         averageMonthlySpendOnInsurance: json["averageMonthlySpendOnInsurance"],
         averageMonthlySpendOnChargesAndStampDuty:
-            json["averageMonthlySpendOnChargesAndStampDuty"].toDouble(),
+            json["averageMonthlySpendOnChargesAndStampDuty"],
         averageMonthlySpendOnInternationalTransactions:
             json["averageMonthlySpendOnInternationalTransactions"],
-        averageMonthlyTotalExpenses:
-            json["averageMonthlyTotalExpenses"].toDouble(),
-        averageMonthlyRecurringExpense:
-            json["averageMonthlyRecurringExpense"].toDouble(),
+        averageMonthlyTotalExpenses: json["averageMonthlyTotalExpenses"],
+        averageMonthlyRecurringExpense: json["averageMonthlyRecurringExpense"],
         averageMonthlySpendOnSavingsAndInvestments:
             json["averageMonthlySpendOnSavingsAndInvestments"],
-        averageMonthlySpendOnOthers:
-            json["averageMonthlySpendOnOthers"].toDouble(),
+        averageMonthlySpendOnOthers: json["averageMonthlySpendOnOthers"],
         mostRecurringExpense: json["mostRecurringExpense"],
-        totalSpendOnTransfer: json["totalSpendOnTransfer"].toDouble(),
-        totalSpendOnAtmAndPos: json["totalSpendOnAtmAndPOS"].toDouble(),
+        totalSpendOnTransfer: json["totalSpendOnTransfer"],
+        totalSpendOnAtmAndPos: json["totalSpendOnAtmAndPOS"],
         totalSpendOnUssd: json["totalSpendOnUSSD"],
         totalSpendOnGambling: json["totalSpendOnGambling"],
         totalSpendOnAirtimeAndData: json["totalSpendOnAirtimeAndData"],
@@ -151,20 +146,20 @@ class SpendAnalysis {
         totalSpendOnRent: json["totalSpendOnRent"],
         totalSpendOnInsurance: json["totalSpendOnInsurance"],
         totalSpendOnChargesAndStampDuty:
-            json["totalSpendOnChargesAndStampDuty"].toDouble(),
+            json["totalSpendOnChargesAndStampDuty"],
         totalSpendOnInternationalTransactions:
             json["totalSpendOnInternationalTransactions"],
-        totalMonthlyExpenses: json["totalMonthlyExpenses"].toDouble(),
-        totalRecurringExpense: json["totalRecurringExpense"].toDouble(),
-        totalExpenses: json["totalExpenses"].toDouble(),
+        totalMonthlyExpenses: json["totalMonthlyExpenses"],
+        totalRecurringExpense: json["totalRecurringExpense"],
+        totalExpenses: json["totalExpenses"],
         totalMonthlyExpense: json["totalMonthlyExpense"],
         totalSpendOnSavingsAndInvestments:
             json["totalSpendOnSavingsAndInvestments"],
-        totalSpendOnOthers: json["totalSpendOnOthers"].toDouble(),
+        totalSpendOnOthers: json["totalSpendOnOthers"],
         atmLocations: List<String>.from(json["atmLocations"].map((x) => x)),
         mostFrequentSpendCategory: json["mostFrequentSpendCategory"],
         monthWithHighestSpend: json["monthWithHighestSpend"],
-        highestSpend: json["highestSpend"].toDouble(),
+        highestSpend: json["highestSpend"],
         mostFrequentExpense: json["mostFrequentExpense"],
         mostFrequentExpenseAmount: json["mostFrequentExpenseAmount"],
       );
@@ -221,7 +216,7 @@ class SpendAnalysis {
         "totalMonthlyExpense": totalMonthlyExpense,
         "totalSpendOnSavingsAndInvestments": totalSpendOnSavingsAndInvestments,
         "totalSpendOnOthers": totalSpendOnOthers,
-        "atmLocations": List<dynamic>.from(atmLocations.map((x) => x)),
+        "atmLocations": List<dynamic>.from(atmLocations!.map((x) => x)),
         "mostFrequentSpendCategory": mostFrequentSpendCategory,
         "monthWithHighestSpend": monthWithHighestSpend,
         "highestSpend": highestSpend,

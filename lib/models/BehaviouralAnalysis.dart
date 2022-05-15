@@ -39,20 +39,19 @@ class BehavioralAnalysis {
             json["monthToMonthInflowToOutflowRate"],
         overallInflowToOutflowRate: json["overallInflowToOutflowRate"],
         totalLoanAmount: json["totalLoanAmount"],
-        totalLoanRepaymentAmount: json["totalLoanRepaymentAmount"].toDouble(),
-        loanInflowRate: json["loanInflowRate"].toDouble(),
-        loanRepaymentToInflowRate: json["loanRepaymentToInflowRate"].toDouble(),
+        totalLoanRepaymentAmount: json["totalLoanRepaymentAmount"],
+        loanInflowRate: json["loanInflowRate"],
+        loanRepaymentToInflowRate: json["loanRepaymentToInflowRate"],
         numberOfCreditLoanTransactions: json["numberOfCreditLoanTransactions"],
         numberOfDebitRepaymentTransactions:
             json["numberOfDebitRepaymentTransactions"],
         gamblingStatus: json["gamblingStatus"],
         gamblingRate: json["gamblingRate"],
-        accountActivity: json["accountActivity"].toDouble(),
-        percentOfInflowIrregularity:
-            json["percentOfInflowIrregularity"].toDouble(),
+        accountActivity: json["accountActivity"],
+        percentOfInflowIrregularity: json["percentOfInflowIrregularity"],
         averageMonthlyLoanAmount: json["averageMonthlyLoanAmount"],
         averageMonthlyLoanRepaymentAmount:
-            json["averageMonthlyLoanRepaymentAmount"].toDouble(),
+            json["averageMonthlyLoanRepaymentAmount"],
         accountSweep: json["accountSweep"],
       );
 
