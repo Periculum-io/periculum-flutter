@@ -384,11 +384,11 @@ class FlutterPericulum {
       getMobileV2TransactionsByBankAddressAndAccountNumberForInsightOverviewKey({
     required String token,
     required String insightsOverviewKey,
-    required String smsAddress,
+    required String bankKey,
     required String accountKey,
   }) async {
     final uri = Uri.parse(
-        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$smsAddress/$accountKey/transactions');
+        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$bankKey/$accountKey/transactions');
 
     var client = http.Client();
     var response;
@@ -456,11 +456,11 @@ class FlutterPericulum {
       getMobileV2InsightsByBankAddressAndAccountNumberForInsightOverviewKey({
     required String token,
     required String insightsOverviewKey,
-    required String smsAddress,
+    required String bankKey,
     required String accountKey,
   }) async {
     final uri = Uri.parse(
-        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$smsAddress/$accountKey/insights');
+        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$bankKey/$accountKey/insights');
 
     var client = http.Client();
     var response;

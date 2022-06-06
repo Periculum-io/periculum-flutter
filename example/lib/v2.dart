@@ -173,7 +173,7 @@ class _V2ExampleState extends State<V2Example> {
                             .getMobileV2InsightsByBankAddressAndAccountNumberForInsightOverviewKey(
                           token: "${dotenv.env['tokenKey']}",
                           insightsOverviewKey: '4',
-                          smsAddress: '141',
+                          bankKey: '141',
                           accountKey: '117',
                         );
                         setState(() {
