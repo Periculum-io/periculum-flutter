@@ -280,6 +280,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         var location: Location = locTask.result
 
                         if (location != null) {
+                    val args = call.arguments as? HashMap<String, String>
                             var latitude = locTask.result.latitude
                             var longitude = locTask.result.longitude
                             var accuracy = locTask.result.accuracy.toDouble()
@@ -308,32 +309,34 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                                     myLocation)
 
                             val jsonInString: String = gson.toJson(periculum)
+                            if (args != null) {
+                                
+                                val endpoint = args.get("endpoint").toString();
 
-                            val endpoint = "/mobile/analytics"
+                                val url = "$BASE_URL$endpoint"
 
-                            val url = "$BASE_URL$endpoint"
+                                val JSON = "application/json; charset=utf-8".toMediaType()
 
-                            val JSON = "application/json; charset=utf-8".toMediaType()
+                                var body: RequestBody = RequestBody.create(JSON, jsonInString)
 
-                            var body: RequestBody = RequestBody.create(JSON, jsonInString)
+                                val request = Request.Builder()
+                                    .addHeader("Authorization", "Bearer $token")
+                                    .post(body)
+                                    .url(url)
+                                    .build()
+                                val client = OkHttpClient()
+                                client.newCall(request).enqueue(object : Callback {
+                                    override fun onResponse(call: Call, response: Response) {
+                                        val tm = response.body!!.string()
+                                        result.success(tm)
+                                    }
 
-                            val request = Request.Builder()
-                                .addHeader("Authorization", "Bearer $token")
-                                .post(body)
-                                .url(url)
-                                .build()
-                            val client = OkHttpClient()
-                            client.newCall(request).enqueue(object : Callback {
-                                override fun onResponse(call: Call, response: Response) {
-                                    val tm = response.body!!.string()
-                                    result.success(tm)
-                                }
-
-                                override fun onFailure(call: Call, e: IOException) {
-                                    val error = e.message;
-                                    result.success("{\"title\": \"${error}\"}")
-                                }
-                            })
+                                    override fun onFailure(call: Call, e: IOException) {
+                                        val error = e.message;
+                                        result.success("{\"title\": \"${error}\"}")
+                                    }
+                                })
+                            } 
 
                         } else {
                             result.success("{\"title\": \"Unable to get location details\"}")

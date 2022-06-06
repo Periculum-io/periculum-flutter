@@ -6,10 +6,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
+import 'package:flutter_periculum/models/BanksResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
+import 'package:flutter_periculum/models/GetMobileV2InsightOverview.dart';
+import 'package:flutter_periculum/models/InsightsResponse.dart';
+import 'package:flutter_periculum/models/LendersResponse.dart';
 import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
+import 'package:flutter_periculum/models/SmsRawResponse.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
+import 'package:flutter_periculum/models/TransactionResponse.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/CustomerIdentificationPayload.dart';
@@ -23,10 +29,12 @@ class FlutterPericulum {
     String? phoneNumber,
     String? bvn,
     String? statementName,
+    String? endpoint,
   }) async {
     try {
       final String response =
           await _channel.invokeMethod('generateMobileDataAnalysis', {
+        'endpoint': endpoint,
         'phoneNumber': phoneNumber,
         "bvn": bvn,
         'statementName': statementName,
@@ -43,7 +51,6 @@ class FlutterPericulum {
       log(e.toString());
       rethrow;
     }
-    // debugPrint(response);
   }
 
   static Future<AffordabilityResponse> affordabilityAnalysis({
@@ -258,6 +265,220 @@ class FlutterPericulum {
       return result;
     } on FormatException catch (_) {
       log("FormatException: Invalid Acccess Token or Statement Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  //V2
+
+  static Future<GetMobileV2InsightOverview> getMobileV2InsightOverview({
+    required String token,
+    required String insightsOverviewKey,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/mobile/v2/$insightsOverviewKey/overview');
+
+    var client = http.Client();
+    Map<String, dynamic> map;
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      var result = response.body;
+      map = json.decode(result);
+      GetMobileV2InsightOverview getMobileV2InsightOverview =
+          GetMobileV2InsightOverview.fromJson(map);
+      return getMobileV2InsightOverview;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<BankResponse> getMobileV2BanksForInsightOverviewKey({
+    required String token,
+    required String insightsOverviewKey,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/mobile/v2/$insightsOverviewKey/banks');
+
+    var client = http.Client();
+    Map<String, dynamic> map;
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      var result = response.body;
+      map = json.decode(result);
+      BankResponse bankResponse = BankResponse.fromJson(map);
+      return bankResponse;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<LendersResponse> getMobileV2LendersForInsightOverviewKey({
+    required String token,
+    required String insightsOverviewKey,
+  }) async {
+    final uri = Uri.parse('$BASE_URL/mobile/v2/$insightsOverviewKey/lenders');
+
+    var client = http.Client();
+    Map<String, dynamic> map;
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      var result = response.body;
+      map = json.decode(result);
+      LendersResponse lendersResponse = LendersResponse.fromJson(map);
+      return lendersResponse;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<List<TransactionResponse>>
+      getMobileV2TransactionsByBankAddressAndAccountNumberForInsightOverviewKey({
+    required String token,
+    required String insightsOverviewKey,
+    required String smsAddress,
+    required String accountKey,
+  }) async {
+    final uri = Uri.parse(
+        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$smsAddress/$accountKey/transactions');
+
+    var client = http.Client();
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      List<TransactionResponse> responseList;
+
+      responseList = transactionResponseFromJson(response.body);
+
+      return responseList;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<List<RawSmsResponse>>
+      getMobileV2LenderRawSMSByLenderAddressForInsightOverviewKey({
+    required String token,
+    required String insightsOverviewKey,
+    required String smsAddress,
+  }) async {
+    final uri = Uri.parse(
+        '$BASE_URL/mobile/v2/$insightsOverviewKey/lenders/rawSMS/$smsAddress');
+
+    var client = http.Client();
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+      List<RawSmsResponse> responseList;
+      responseList = rawSmsResponseFromJson(response.body);
+
+      return responseList;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
+      rethrow;
+    } on HttpException catch (_) {
+      log("HttpException: Check your connection");
+      rethrow;
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  static Future<InsightsResponse>
+      getMobileV2InsightsByBankAddressAndAccountNumberForInsightOverviewKey({
+    required String token,
+    required String insightsOverviewKey,
+    required String smsAddress,
+    required String accountKey,
+  }) async {
+    final uri = Uri.parse(
+        '$BASE_URL/mobile/v2/$insightsOverviewKey/banks/$smsAddress/$accountKey/insights');
+
+    var client = http.Client();
+    var response;
+    try {
+      response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      var result = response.body;
+      var map = json.decode(result);
+      InsightsResponse insightsResponse = InsightsResponse.fromJson(map);
+      return insightsResponse;
+    } on FormatException catch (_) {
+      log("FormatException: Invalid Acccess Token or Insights Key");
       rethrow;
     } on HttpException catch (_) {
       log("HttpException: Check your connection");

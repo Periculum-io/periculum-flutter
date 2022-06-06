@@ -12,10 +12,11 @@ import 'package:flutter_periculum/models/CustomerIdentificationPayload.dart';
 import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
 import 'package:flutter_periculum/models/StatementResponse.dart';
 import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
+import 'package:flutter_periculum_example/v2.dart';
 
 void main() async {
   await dotenv.load();
-  runApp(const MyApp());
+  runApp(const V2Example());
 }
 
 class MyApp extends StatefulWidget {
@@ -67,7 +68,8 @@ class _MyAppState extends State<MyApp> {
                           response = await FlutterPericulum.mobileDataAnalysis(
                               phoneNumber: "08023456789",
                               bvn: "12345678901",
-                              token: "${dotenv.env['tokenKey']}");
+                              token: "${dotenv.env['tokenKey']}",
+                              endpoint: "/mobile/insights");
                           setState(() {
                             responseOutput =
                                 "GenerateMobileAnalysis -> $response";
@@ -286,6 +288,18 @@ class _MyAppState extends State<MyApp> {
                       height: 30,
                     ),
                     Text("Result: $responseOutput"),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const V2Example()),
+                          );
+                        },
+                        child: const Text('V2')),
+                    const SizedBox(
+                      height: 30,
+                    ),
                   ],
                 ),
               ),
