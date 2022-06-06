@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_periculum/models/AffordabilityResponse.dart';
 import 'package:flutter_periculum/models/BanksResponse.dart';
 import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/GetMobileV2InsightOverview.dart';
+import 'package:flutter_periculum/models/MobileAnalysisResponseV2.dart';
 import 'package:flutter_periculum/models/InsightsResponse.dart';
 import 'package:flutter_periculum/models/LendersResponse.dart';
 import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
@@ -277,7 +277,7 @@ class FlutterPericulum {
 
   //V2
 
-  static Future<GetMobileV2InsightOverview> getMobileV2InsightOverview({
+  static Future<MobileAnalysisResponseV2> getMobileV2InsightOverview({
     required String token,
     required String insightsOverviewKey,
   }) async {
@@ -297,8 +297,8 @@ class FlutterPericulum {
 
       var result = response.body;
       map = json.decode(result);
-      GetMobileV2InsightOverview getMobileV2InsightOverview =
-          GetMobileV2InsightOverview.fromJson(map);
+      MobileAnalysisResponseV2 getMobileV2InsightOverview =
+          MobileAnalysisResponseV2.fromJson(map);
       return getMobileV2InsightOverview;
     } on FormatException catch (_) {
       log("FormatException: Invalid Acccess Token or Insights Key");
