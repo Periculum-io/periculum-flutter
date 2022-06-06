@@ -1,13 +1,15 @@
 import 'dart:convert';
 
-GetMobileV2InsightOverview getMobileV2InsightOverviewFromJson(String str) =>
-    GetMobileV2InsightOverview.fromJson(json.decode(str));
+import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
 
-String getMobileV2InsightOverviewToJson(GetMobileV2InsightOverview data) =>
+MobileAnalysisResponseV2 getMobileV2InsightOverviewFromJson(String str) =>
+    MobileAnalysisResponseV2.fromJson(json.decode(str));
+
+String getMobileV2InsightOverviewToJson(MobileAnalysisResponseV2 data) =>
     json.encode(data.toJson());
 
-class GetMobileV2InsightOverview {
-  GetMobileV2InsightOverview({
+class MobileAnalysisResponseV2 {
+  MobileAnalysisResponseV2({
     this.key,
     this.name,
     this.createdTime,
@@ -29,8 +31,8 @@ class GetMobileV2InsightOverview {
   int? totalClosingBalance;
   int? totalNumberOfTransactions;
 
-  factory GetMobileV2InsightOverview.fromJson(Map<String, dynamic> json) =>
-      GetMobileV2InsightOverview(
+  factory MobileAnalysisResponseV2.fromJson(Map<String, dynamic> json) =>
+      MobileAnalysisResponseV2(
         key: json["key"],
         name: json["name"],
         createdTime: json["createdTime"],
