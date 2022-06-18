@@ -48,6 +48,8 @@ class _MyAppState extends State<MyApp> {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileAnalysisV1(
                               publicKey: 'nucleusis123',
+                              bvn: '344983985053053',
+                              phoneNumber: '09098983930',
                             );
                             setState(() {
                               responseOutput = flutterPericulum;
@@ -89,7 +91,9 @@ class _MyAppState extends State<MyApp> {
                             );
 
                             setState(() {
-                              responseOutput = flutterPericulum;
+                              responseOutput = flutterPericulum
+                                  .mobileInsightsOverviewKey
+                                  .toString();
                             });
                           } on Exception catch (e) {
                             throw e.toString();

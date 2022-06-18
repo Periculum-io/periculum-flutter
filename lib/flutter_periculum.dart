@@ -3,14 +3,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_periculum/models/overview_key.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
 
   static Future<String> generateMobileAnalysisV1({
     required String publicKey,
-    String? phoneNumber,
-    String? bvn,
+    required String phoneNumber,
+    required String bvn,
   }) async {
     try {
       final String response =
@@ -19,16 +20,12 @@ class FlutterPericulum {
         'phoneNumber': phoneNumber,
         'endpoint': '/mobile/analytics',
       });
-      log(response);
       return response;
     } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token");
       rethrow;
-    } on HttpException catch (e) {
-      log(e.message);
+    } on HttpException catch (_) {
       rethrow;
     } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }
@@ -46,14 +43,13 @@ class FlutterPericulum {
         "bvn": bvn,
         'endpoint': '/mobile/insights/v2',
       });
-      log(response);
       return response;
     } on PlatformException catch (e) {
       throw e.message.toString();
     }
   }
 
-  static Future<String> patchMobileAnalysisV2({
+  static Future<OverviewKey> patchMobileAnalysisV2({
     required String publicKey,
     required String overviewkey,
     String? phoneNumber,
@@ -67,16 +63,12 @@ class FlutterPericulum {
         'phoneNumber': phoneNumber,
         "bvn": bvn,
       });
-      log(response);
-      return response;
+      return overviewKeyFromJson(response);
     } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token");
       rethrow;
     } on HttpException catch (e) {
-      log(e.message);
       rethrow;
     } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }
