@@ -75,7 +75,7 @@ var flutterPericulum =
       );
 ```
 
-## Generate Mobile Analysis for Version 1 of the SDK
+## Generate Mobile Insight for Version 2 of the SDK
 
 Returns a Json String contain //{ "mobileInsightsOverviewKey": 6}
 ###### 
