@@ -1,269 +1,74 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_periculum/models/AffordabilityResponse.dart';
-import 'package:flutter_periculum/models/CreditScoreResponse.dart';
-import 'package:flutter_periculum/models/MobileAnalysisResponse.dart';
-import 'package:flutter_periculum/models/StatementResponse.dart';
-import 'package:flutter_periculum/models/StatementTransactionResponse.dart';
-import 'package:http/http.dart' as http;
-
-import 'models/CustomerIdentificationPayload.dart';
+import 'package:flutter_periculum/models/overview_key.dart';
 
 class FlutterPericulum {
   static const MethodChannel _channel = MethodChannel('flutter_periculum');
-  static const String BASE_URL = "https://api.insights-periculum.com";
 
-  static Future<String> mobileDataAnalysis({
-    required String token,
-    String? phoneNumber,
-    String? bvn,
-    String? statementName,
+  static Future<String> generateMobileAnalysisV1({
+    required String publicKey,
+    required String phoneNumber,
+    required String bvn,
   }) async {
     try {
       final String response =
           await _channel.invokeMethod('generateMobileDataAnalysis', {
+        "publicKey": publicKey,
         'phoneNumber': phoneNumber,
-        "bvn": bvn,
-        'statementName': statementName,
-        "token": token,
+        'endpoint': '/mobile/analytics',
       });
       return response;
     } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token");
+      rethrow;
+    } on HttpException catch (_) {
+      rethrow;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<String> generateMobileInsightV2({
+    required String publicKey,
+    String? phoneNumber,
+    String? bvn,
+  }) async {
+    try {
+      final String response =
+          await _channel.invokeMethod('generateMobileDataAnalysis', {
+        "publicKey": publicKey,
+        'phoneNumber': phoneNumber,
+        "bvn": bvn,
+        'endpoint': '/mobile/insights/v2',
+      });
+      return response;
+    } on PlatformException catch (e) {
+      throw e.message.toString();
+    }
+  }
+
+  static Future<OverviewKey> patchMobileAnalysisV2({
+    required String publicKey,
+    required String overviewkey,
+    String? phoneNumber,
+    String? bvn,
+  }) async {
+    try {
+      final String response =
+          await _channel.invokeMethod('patchMobileAnalysis', {
+        "publicKey": publicKey,
+        "overviewkey": overviewkey,
+        'phoneNumber': phoneNumber,
+        "bvn": bvn,
+      });
+      return overviewKeyFromJson(response);
+    } on FormatException catch (_) {
       rethrow;
     } on HttpException catch (e) {
-      log(e.message);
       rethrow;
     } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-    // debugPrint(response);
-  }
-
-  static Future<AffordabilityResponse> affordabilityAnalysis({
-    required String token,
-    required double dti,
-    required int statementKey,
-    required int loanTenure,
-    int? averageMonthlyTotalExpenses,
-    int? averageMonthlyLoanRepaymentAmount,
-  }) async {
-    try {
-      Map<String, dynamic> map;
-
-      AffordabilityResponse affordabilityResponse;
-      String response =
-          await _channel.invokeMethod('generateAffordabilityAnalysis', {
-        'token': token,
-        'dti': dti,
-        'statementKey': statementKey,
-        'loanTenure': loanTenure,
-        'averageMonthlyTotalExpenses': averageMonthlyTotalExpenses,
-        'averageMonthlyLoanRepaymentAmount': averageMonthlyLoanRepaymentAmount,
-      });
-
-      var result = json.decode(response);
-      map = json.decode(response);
-      affordabilityResponse = AffordabilityResponse.fromJson(map);
-      return affordabilityResponse;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<StatementResponse> getStatementAnalytics({
-    required String token,
-    required String statementKey,
-  }) async {
-    try {
-      Map<String, dynamic> map;
-      String response = await _channel.invokeMethod('getStatementAnalytics', {
-        'token': token,
-        'statementKey': statementKey,
-      });
-
-      map = json.decode(response);
-      StatementResponse exisitingStatementResponse =
-          StatementResponse.fromJson(map);
-      return exisitingStatementResponse;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<List<CreditScoreResponse>> getExisitingCreditScore({
-    required String token,
-    required String statementKey,
-  }) async {
-    String response = await _channel.invokeMethod('getExistingCreditScore', {
-      'token': token,
-      'statementKey': statementKey,
-    });
-
-    try {
-      List<CreditScoreResponse> responseList;
-
-      responseList = (json.decode(response) as List)
-          .map((i) => CreditScoreResponse.fromJson(i))
-          .toList();
-
-      return responseList;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<List<Transaction>> getStatementTransaction({
-    required String token,
-    required String statementKey,
-  }) async {
-    String response = await _channel.invokeMethod('getStatementTransaction', {
-      'token': token,
-      'statementKey': statementKey,
-    });
-
-    try {
-      List<Transaction> responseList;
-
-      responseList = (json.decode(response) as List)
-          .map((i) => Transaction.fromJson(i))
-          .toList();
-      return responseList;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<List<AffordabilityResponse>> getAffordability({
-    required String token,
-    required String statementKey,
-  }) async {
-    String response = await _channel.invokeMethod('getAffordability', {
-      'token': token,
-      'statementKey': statementKey,
-    });
-
-    try {
-      List<AffordabilityResponse> responseList;
-
-      responseList = (json.decode(response) as List)
-          .map((i) => AffordabilityResponse.fromJson(i))
-          .toList();
-
-      return responseList;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<CreditScoreResponse> generateCreditScore({
-    required String token,
-    required String statementKey,
-  }) async {
-    final uri = Uri.parse('$BASE_URL/creditscore/$statementKey');
-
-    var client = http.Client();
-    Map<String, dynamic> map;
-    var response;
-    try {
-      response = await client.post(
-        uri,
-        body: jsonEncode({}),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      var result = response.body;
-
-      map = json.decode(result);
-      CreditScoreResponse creditScoreResponse =
-          CreditScoreResponse.fromJson(map);
-      return creditScoreResponse;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
-      rethrow;
-    }
-  }
-
-  static Future<dynamic> attachCustomerIdentificationInfromation({
-    required String token,
-    required String statementKey,
-    required CustomerIdentificationPayload customerIdentificationPayload,
-  }) async {
-    final uri = Uri.parse('$BASE_URL/statements/identification');
-
-    var client = http.Client();
-    var response;
-    var payload = customerIdentificationPayload;
-    try {
-      response = await client.patch(
-        uri,
-        body: json.encode(payload),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      );
-      debugPrint(customerIdentificationPayloadToJson(payload).toString());
-      var result = response.statusCode;
-
-      return result;
-    } on FormatException catch (_) {
-      log("FormatException: Invalid Acccess Token or Statement Key");
-      rethrow;
-    } on HttpException catch (_) {
-      log("HttpException: Check your connection");
-      rethrow;
-    } catch (e) {
-      log(e.toString());
       rethrow;
     }
   }

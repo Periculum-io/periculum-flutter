@@ -43,7 +43,7 @@ Visit https://www.periculum.io/documentation/insights/#authenticationrequest for
 
 
 #### Required Permission 
-The following permission (LOCATION, SMS and WIFI) are required to be requested in the AndroidManifest.xml from the Android device before make the making calling `FlutterPericulum.mobileDataAnalysis` . 
+The following permission (LOCATION, SMS and WIFI) are required to be requested in the AndroidManifest.xml from the Android device before calling method of the package. 
 
 ```xml
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -51,180 +51,90 @@ The following permission (LOCATION, SMS and WIFI) are required to be requested i
   <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
   <uses-permission android:name="android.permission.READ_SMS" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-  <uses-permission android:name="android.permission.INTERNET"/> //Internet permission is generally required
+  <uses-permission android:name="android.permission.INTERNET"/> 
 ```
 
 
-## Generate Mobile Analysis
-```dart
-try {
-  response = await FlutterPericulum.mobileDataAnalysis(
-      phoneNumber: "08023456789",
-      bvn: "12345678901",
-      token: "Ebter Access token");
-  setState(() {
-    responseOutput =
-        "GenerateMobileAnalysis -> $response"; //Returns a string of Array of mobile Analysis.
-  });
-} catch (e){
-  //handle exception 
-}
-```
+## Generate Mobile Analysis for Version 1 of the SDK
 
-## Generate Affordability 
+###### 
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `publicKey` | `String` | **required**  |
+| `phoneNumber` | `String` | **required** |
+| `bvn` | `String` | **required** |
 
-```dart
-AffordabilityResponse response; //returns an AffordabilityResponse object 
-try {
-  response = await FlutterPericulum.affordabilityAnalysis(
-      statementKey: 3,
-      dti: 2.0,
-      loanTenure: 30,
-      averageMonthlyTotalExpenses: 4000, //optional
-      averageMonthlyLoanRepaymentAmount: 1000, //optional
-      token: "..." [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication)
+Returns a list of key 
+
+```dart 
+var flutterPericulum =
+          await FlutterPericulum.generateMobileAnalysis(
+        publicKey: 'publicKey',
+        bvn: '1234567890123',
+        phoneNumber: '090********',
       );
-} on PlatformException {
-  response = 'Failed to get platform version.';
-}
-if (!mounted) return;
 ```
-## Generate Credit Score
 
+## Generate Mobile Insight for Version 2 of the SDK
+
+Returns a Json String contain //{ "mobileInsightsOverviewKey": 6}
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `statementKey` | `String` | **required** |
+| `publicKey` | `String` | **required**  |
+| `phoneNumber` | `String` | **required** |
+| `bvn` | `String` | **required** |
 
-
-```dart
-CreditScoreResponse response; //returns an CreditScoreResponse object 
-
-try {
-  response =
-    await FlutterPericulum.generateCreditScore(
-    token: "" //get token from authentication,
-    statementKey: '125',
-  );
-} catch (e) {
-   //handle exceptions
-}
+```dart 
+var flutterPericulum =
+          await FlutterPericulum.generateMobileInsightV2(
+        publicKey: 'publicKey',
+        bvn: '1234567890123',
+        phoneNumber: '090********',
+      );
 ```
 
-## Get Existing Credit Score
+## Update an existing Mobile Analysis for Version 2 of the SDK
 
+
+Returns a Json Object carrying ```OverviewKey``mobileInsightsOverviewKey 
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `statementKey` | `String` | **required** |
+| `publicKey` | `String` | **required**  |
+| `phoneNumber` | `String` | **optional** |
+| `bvn` | `String` | **optional** |
 
 ```dart
-List<CreditScoreResponse> response; //returns an List<CreditScoreResponse> object 
-
-try {
-  response =
-    await FlutterPericulum.getExisitingCreditScore(
-    token: "", //get token from authentication 
-    statementKey: '125',
-  );
-} catch (e) {
-   //handle exceptions
-}
+var flutterPericulum =
+          await FlutterPericulum.patchMobileAnalysisV2(
+        publicKey: 'publickKey',
+        overviewkey: 'overviewKey',
+        bvn: '12345678908765',
+        phoneNumber: '090********');
 ```
-## Get Statement Transactions
-###### 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `statementKey` | `String` | **required** |
 
 
 ```dart
-List<Transaction> response; //returns an List<Transaction> object 
-
-try {
-  response =
-    await FlutterPericulum.getStatementTransaction(
-    token: "" //get token from authentication,
-    statementKey: '125',
-  );
-} catch (e) {
-   //handle exceptions
-}
+ ElevatedButton(
+  onPressed: () async {
+    try {
+      var flutterPericulum =
+          await FlutterPericulum.generateMobileInsightV2(
+        publicKey: 'nucleusis123',
+        bvn: '344983985053053',
+        phoneNumber: '09098983930',
+  
+      setState(() {
+        responseOutput = flutterPericulum;
+      });
+    } on Exception catch (e) {
+      throw e.toString();
+    }
+  },
+  child: const Text('Mobile Analysis V2'),
+),
 ```
-
-## Get Existing Statement Analytics
-###### 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `statementKey` | `String` | **required** |
-
-
-```dart
-StatementResponse response; //returns an StatementResponse object 
-
-
-try {
-  response =
-    await FlutterPericulum.getStatementAnalytics(
-    token: "" //get token from authentication,
-    statementKey: '125',
-  );
-} catch (e) {
-   //handle exceptions
-}
-```
-
-## Get Existing Statement Affordability Analysis
-###### 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | **required** [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `statementKey` | `String` | **required** |
-
-```dart
-List<AffordabilityResponse> response; //returns an List<AffordabilityResponse> object 
-
-try {
-  response =
-    await FlutterPericulum.getAffordability(
-    token: "" //get token from authentication,
-    statementKey: '125',
-  );
-} catch (e) {
-   //handle exceptions
-}
-```
-
-## Attach Customer Identification Information To A Statement
-###### 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `token` | `String` | **required**  [Get token](https://github.com/SteveOye/periculum-flutter/blob/docs_refactor/README.md#authentication) |
-| `customerIdentificationPayload` | `CustomerIdentificationPayload` | **required** |
-
-
-```dart
-var response; //returns the statusCode
-onPressed: () async {
-  var data = IdentificationData(
-      identifierName: 'bvn', value: '8678');
-  var data2 = IdentificationData(
-      identifierName: 'nin', value: '8678');
-  response = await FlutterPericulum
-      .attachCustomerIdentificationInfromation(
-          token: "" //get token from authentication,
-          statementKey: '125',
-          customerIdentificationPayload:
-              CustomerIdentificationPayload(
-                  statementKey: 125,
-                  identificationData: [data, data2]));
-},
-```
-
 ...
 ## Compatibility
 Minimum Android SDK: `Periculum requires a minimum API level of 21.`

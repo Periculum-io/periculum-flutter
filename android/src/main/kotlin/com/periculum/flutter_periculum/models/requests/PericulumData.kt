@@ -1,12 +1,5 @@
 package com.periculum.flutter_periculum.models.requests
 
-data class AffordabilityPayload(
-    var dti: Double,
-    var statementKey: Int,
-    var loanTenure: Int,
-    var averageMonthlyTotalExpenses: Int?,
-    var averageMonthlyLoanRepaymentAmount: Int?
-)
 
 data class Customer(
     val phoneNumber: String,
@@ -18,6 +11,7 @@ data class MetaData(
 )
 
 data class Periculum(
+    var publicKey: String,
     var statementName: String,
     var device: Device,
     var sms: MainSMS,

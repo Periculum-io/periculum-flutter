@@ -70,170 +70,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
       
-        if (call.method == "generateAffordabilityAnalysis") {
-            val args = call.arguments as HashMap<String, Any>
-
-            if (args != null) {
-                val token = args.get("token")
-                val dti = args.get("dti")
-                val statementKey = args.get("statementKey")
-                val loanTenure = args.get("loanTenure")
-                val averageMonthlyTotalExpenses = args.get("averageMonthlyTotalExpenses")
-                val averageMonthlyLoanRepaymentAmount =
-                    args.get("averageMonthlyLoanRepaymentAmount")
-
-                val gson = Gson()
-
-                var payload: AffordabilityPayload = AffordabilityPayload(
-                    dti = dti as Double,
-                    statementKey = statementKey as Int,
-                    loanTenure = loanTenure as Int,
-                    averageMonthlyTotalExpenses = averageMonthlyLoanRepaymentAmount as Int?,
-                    averageMonthlyLoanRepaymentAmount = averageMonthlyLoanRepaymentAmount as Int?,
-                )
-
-                val endpoint = "/affordability"
-
-                val url = "$BASE_URL$endpoint"
-
-                val JSON = "application/json; charset=utf-8".toMediaType()
-                Log.d("Payload", payload.toString())
-
-                val JSONObjectString: String = gson.toJson(payload)
-
-                Log.d("PARAMETERS", JSONObjectString)
-
-                var body: RequestBody = RequestBody.create(JSON, JSONObjectString)
-                val request = Request.Builder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .post(body)
-                    .url(url)
-                    .build()
-                val client = OkHttpClient()
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        val tm = response.body!!.string()
-
-                        result.success(tm)
-                    }
-
-                    override fun onFailure(call: Call, e: IOException) {
-                        val error = e.message
-                        result.success("{\"title\": \"${error}\"}")
-                    }
-                })
-
-            }
-        } else if (call.method == "getStatementAnalytics"){
-            val args = call.arguments as HashMap<String, Any>
-            if (args != null){
-                val token = args.get("token")
-                var key = args.get("statementKey")
-                val endpoint = "/statements/"
-
-                var url = "$BASE_URL$endpoint$key"
-
-
-                val client = OkHttpClient()
-                var request = Request.Builder()
-                        .addHeader("Authorization", "Bearer $token")
-                        .url(url)
-                        .build()
-                    client.newCall(request).enqueue(object : Callback{
-                        override fun onResponse(call: Call, response: Response){
-                            val callResponse = response.body!!.string()
-                            result.success("$callResponse");
-                        }
-
-                        override fun onFailure(call: Call, e: IOException) {
-                            val error = e.message
-                            result.success("{\"title\": \"${error}\"}")
-                        }
-                    })
-
-            
-           }
-       } else if (call.method == "getStatementTransaction"){ 
-            val args = call.arguments as HashMap<String, Any>
-            if (args != null){
-                var token = args.get("token")
-                var key = args.get("statementKey")
-                val endpoint = "/statements"
-                val client = OkHttpClient()
-                var request = Request.Builder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .url("$BASE_URL$endpoint/$key/transactions")
-                    .build()
-                client.newCall(request).enqueue(object : Callback{
-                    override fun onResponse(call: Call, response: Response){
-                        val callResponse = response.body!!.string()
-
-                        result.success("$callResponse");
-                    }
-
-                    override fun onFailure(call: Call, e: IOException) {
-                        val error: String? = e.message
-                        result.success("{\"title\": \"${error}\"}")
-                    }
-                })
-
-
-            }
-        } else if (call.method == "getExistingCreditScore"){
-            val args = call.arguments as HashMap<String, Any>
-            if (args != null) {
-                var token = args.get("token")
-                var key = args.get("statementKey")
-
-                var url = "$BASE_URL/creditscore/$key"
-
-                val client = OkHttpClient()
-                var request = Request.Builder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .url(url)
-                    .build()
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        val callResponse = response.body!!.string()
-
-                        result.success("$callResponse");
-                    }
-
-                    override fun onFailure(call: Call, e: IOException) {
-                        val error = e.message
-                        result.success("{\"title\": \"${error}\"}")
-                    }
-                })
-
-            }
-        } else if (call.method == "getAffordability"){
-            val args = call.arguments as HashMap<String, Any>
-            if (args != null) {
-                var token = args.get("token")
-                var key = args.get("statementKey")
-
-                var url = "$BASE_URL/affordability/$key"
-
-                val client = OkHttpClient()
-                var request = Request.Builder()
-                    .addHeader("Authorization", "Bearer $token")
-                    .url(url)
-                    .build()
-                client.newCall(request).enqueue(object : Callback {
-                    override fun onResponse(call: Call, response: Response) {
-                        val callResponse = response.body!!.string()
-
-                        result.success("$callResponse");
-                    }
-
-                    override fun onFailure(call: Call, e: IOException) {
-                        val error = e.message
-                        result.success("{\"title\": \"${error}\"}")
-                    }
-                })
-
-            }
-        }else if (call.method == "generateMobileDataAnalysis") {
+       if (call.method == "generateMobileDataAnalysis") {
             GlobalScope.launch(Dispatchers.IO) {
                 if (!isLocationAndReadSMSPermissionGranted()) {
                     async { requestLocationAndReadSMSPermissions() }
@@ -249,12 +86,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     var statementName: String = ""
                     var phoneNumber: String = ""
                     var bvn: String = ""
-                    var token: String = ""
+                    var publicKey: String = ""
 
                     if (args != null) {
-                        statementName =
-                            args.getOrElse("statementName") { getStatementName().toString() }
-                        token = args.get("token").toString()
+                        statementName = getStatementName().toString() 
+                        publicKey = args.get("publicKey").toString()
                         phoneNumber = args.get("phoneNumber").toString()
                         bvn = args.get("bvn").toString()
 
@@ -280,6 +116,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         var location: Location = locTask.result
 
                         if (location != null) {
+                    val args = call.arguments as? HashMap<String, String>
                             var latitude = locTask.result.latitude
                             var longitude = locTask.result.longitude
                             var accuracy = locTask.result.accuracy.toDouble()
@@ -301,39 +138,176 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                             val gson = Gson()
 
                             periculum =
-                                Periculum(statementName,
+                                Periculum(
+                                    publicKey,
+                                    statementName,
                                     mydevice,
                                     mysms,
                                     mymetadata,
                                     myLocation)
 
                             val jsonInString: String = gson.toJson(periculum)
+                            if (args != null) {
+                                
+                                val endpoint = args.get("endpoint").toString();
 
-                            val endpoint = "/mobile/analytics"
+                                val url = "$BASE_URL$endpoint"
 
-                            val url = "$BASE_URL$endpoint"
+                                val JSON = "application/json; charset=utf-8".toMediaType()
 
-                            val JSON = "application/json; charset=utf-8".toMediaType()
+                                var body: RequestBody = RequestBody.create(JSON, jsonInString)
 
-                            var body: RequestBody = RequestBody.create(JSON, jsonInString)
+                                val request = Request.Builder()
+                                    .post(body)
+                                    .url(url)
+                                    .build()
+                                val client = OkHttpClient()
+                                client.newCall(request).enqueue(object : Callback {
+                                    override fun onResponse(call: Call, response: Response) {
+                                        val tm = response.body!!.string()
+                                        val statusCode = response.code
+                                        if(statusCode == 401){
+                                            result.success("Invalid public key.");
+                                        }else if(statusCode == 200){
+                                            result.success(tm)
+                                        }else if(statusCode == 400){
+                                            result.success("There is already an Insights with the unique id provided. Please use the PATCH endpoint to update the existing Insights.")
+                                        }else{
+                                            result.success(response.code.toString())
+                                        }
+                                    }
 
-                            val request = Request.Builder()
-                                .addHeader("Authorization", "Bearer $token")
-                                .post(body)
-                                .url(url)
-                                .build()
-                            val client = OkHttpClient()
-                            client.newCall(request).enqueue(object : Callback {
-                                override fun onResponse(call: Call, response: Response) {
-                                    val tm = response.body!!.string()
-                                    result.success(tm)
-                                }
+                                    override fun onFailure(call: Call, e: IOException) {
+                                        val error = e.message;
+                                        result.success("{\"title\": \"${error}\"}")
+                                    }
+                                })
+                            } 
 
-                                override fun onFailure(call: Call, e: IOException) {
-                                    val error = e.message;
-                                    result.success("{\"title\": \"${error}\"}")
-                                }
-                            })
+                        } else {
+                            result.success("{\"title\": \"Unable to get location details\"}")
+                        }
+                    }
+
+                } else {
+                    result.success("{\"title\": \"Unable to get permission\"}")
+                }
+            }
+        }
+        else if (call.method == "patchMobileAnalysis") {
+            GlobalScope.launch(Dispatchers.IO) {
+                if (!isLocationAndReadSMSPermissionGranted()) {
+                    async { requestLocationAndReadSMSPermissions() }
+                }
+
+                var pCheck = async { isLocationAndReadSMSPermissionGranted() }
+
+                if (pCheck.await()) {
+
+                    checkPermissions();
+
+                    val args = call.arguments as? HashMap<String, String>
+                    var statementName: String = ""
+                    var phoneNumber: String = ""
+                    var bvn: String = ""
+                    var publicKey: String = ""
+                    var overviewkey: String = ""
+
+                    if (args != null) {
+                        statementName = getStatementName().toString() 
+                        overviewkey = args.get("overviewkey").toString()
+                        publicKey = args.get("publicKey").toString()
+                        phoneNumber = args.get("phoneNumber").toString()
+                        bvn = args.get("bvn").toString()
+
+                        if (statementName == null || statementName == "null") {
+                            statementName = getStatementName().toString()
+                        }
+                    } else {
+                        statementName = getStatementName().toString()
+                    }
+
+
+                    var customer = Customer(phoneNumber, bvn)
+                    var mymetadata = MetaData(customer)
+                    var device = async { getDeviceDetails() }
+                    var smses = async { getDebitSMSes() }
+
+                    var mydevice = device.await()
+                    var mysms = smses.await()
+
+                    fusedLocationProviderClient =
+                        LocationServices.getFusedLocationProviderClient(myplugin.context)
+                    fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
+                        var location: Location = locTask.result
+
+                        if (location != null) {
+                    val args = call.arguments as? HashMap<String, String>
+                            var latitude = locTask.result.latitude
+                            var longitude = locTask.result.longitude
+                            var accuracy = locTask.result.accuracy.toDouble()
+                            var speed = locTask.result.speed.toDouble()
+                            var bearing = locTask.result.bearing.toDouble()
+                            var altitude = locTask.result.altitude
+                            var time = getStatementName()
+
+                            myLocation = LocationDetails(
+                                accuracy,
+                                altitude,
+                                bearing,
+                                latitude,
+                                longitude,
+                                "fused",
+                                speed,
+                                time)
+
+                            val gson = Gson()
+
+                            periculum =
+                                Periculum(
+                                    publicKey,
+                                    statementName,
+                                    mydevice,
+                                    mysms,
+                                    mymetadata,
+                                    myLocation)
+
+                            val jsonInString: String = gson.toJson(periculum)
+                            if (args != null) {
+                                
+                                val overviewkey = args.get("overviewkey").toString();
+
+                                val url = "$BASE_URL/mobile/insights/v2/$overviewkey"
+
+                                val JSON = "application/json; charset=utf-8".toMediaType()
+
+                                var body: RequestBody = RequestBody.create(JSON, jsonInString)
+
+                                val request = Request.Builder()
+                                    .patch(body)
+                                    .url(url)
+                                    .build()
+                                val client = OkHttpClient()
+                                client.newCall(request).enqueue(object : Callback {
+                                    override fun onResponse(call: Call, response: Response) {
+                                        val tm = response.body!!.string()
+                                        val statusCode = response.code
+                                         if(statusCode == 401){
+                                            result.success("Invalid public key.");
+                                        }else if(statusCode == 400){
+                                            result.success("The value '{overviewkey}' is not valid.");
+                                        }else{
+                                            result.success(tm)
+                                        }
+                                      
+                                    }
+
+                                    override fun onFailure(call: Call, e: IOException) {
+                                        val error = e.message;
+                                        result.success("{\"title\": \"${error}\"}")
+                                    }
+                                })
+                            } 
 
                         } else {
                             result.success("{\"title\": \"Unable to get location details\"}")
