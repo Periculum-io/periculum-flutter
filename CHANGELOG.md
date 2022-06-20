@@ -8,7 +8,7 @@ Get Mobile Data Analysis
 
 Updated Affordabilily Analysis to include optional averageMonthlyTotalExpenses and averageMonthlyLoanRepaymentAmount in its payload
 
-## 0.0.3 - 2022-05-14
+## 1.0.0 - 2022-05-16
 
 Update the package with new features:
 * Generate Credit Score 
@@ -18,3 +18,12 @@ Update the package with new features:
 * Get Existing Affordabilit Statement
 * Add Clients Identification to Statement
 
+## 2.0.0 - 2022-06-20
+
+Update the package with new features:
+* Changed authentication to public key
+* SDKs are now push data only for both V1 and V2 flows
+* V1 generates statement analytics per bank identified from SMS messages
+* V2 generates mobile statement analytics
+* V1 endpoint returns statement analytics key which can be sent to backend server. The backend server can call Insights with client_credentials flow for the full details.
+* V2 endpoint returns mobile statement analytics overview key which can be sent to backend server. The backend server can call Insights with client_credentials flow for all of the V2 data.
