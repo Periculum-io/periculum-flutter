@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileAnalysisV1(
-                              publicKey: 'insert PublicKey',
+                              publicKey: 'periculumprod123',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileInsightV2(
-                              publicKey: 'insert PublicKey',
+                              publicKey: 'periculumprod123',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
@@ -86,8 +86,8 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.patchMobileAnalysisV2(
-                              publicKey: 'insert PublicKey',
-                              overviewkey: 'insert customer overviewkey',
+                              publicKey: 'periculumprod123',
+                              overviewkey: '32',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
