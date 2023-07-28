@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_periculum/flutter_periculum.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   await dotenv.load();
@@ -47,15 +49,15 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileAnalysisV1(
-                              publicKey: 'nucleusis123',
+                              publicKey: 'insert PublicKey',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
                             setState(() {
-                              responseOutput = flutterPericulum;
+                              responseOutput = flutterPericulum.toString();
                             });
                           } catch (e) {
-                            throw e.toString();
+                            rethrow;
                           }
                         },
                         child: const Text('Mobile Analysis V1'),
@@ -65,16 +67,16 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileInsightV2(
-                              publicKey: 'nucleusis123',
+                              publicKey: 'insert PublicKey',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
 
                             setState(() {
-                              responseOutput = flutterPericulum;
+                              responseOutput = flutterPericulum.toString();
                             });
-                          } on Exception catch (e) {
-                            throw e.toString();
+                          } on Exception catch (_) {
+                            rethrow;
                           }
                         },
                         child: const Text('Mobile Analysis V2'),
@@ -84,19 +86,19 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.patchMobileAnalysisV2(
-                              publicKey: 'nucleusis123',
-                              overviewkey: '12',
+                              publicKey: 'insert PublicKey',
+                              overviewkey: 'insert customer overviewkey',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
 
                             setState(() {
                               responseOutput = flutterPericulum
-                                  .mobileInsightsOverviewKey
                                   .toString();
                             });
                           } on Exception catch (e) {
-                            throw e.toString();
+                            log(e.toString());
+                            // throw e.toString();
                           }
                         },
                         child: const Text('Patch Analysis V2'),
