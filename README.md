@@ -40,7 +40,7 @@ The following permission (LOCATION, SMS and WIFI) are required to be requested i
 | `phoneNumber` | `String` | **required** |
 | `bvn` | `String` | **required** |
 
-Returns a list of key 
+Returns a PericulumResponse 
 
 ```dart 
 var flutterPericulum =
@@ -51,9 +51,20 @@ var flutterPericulum =
       );
 ```
 
+## Return type of PericulumResponse
+
+```dart 
+{
+   "insightKey":"mobileInsightKey", //num
+   "statusCode":"statusCode", //num
+   "status":"status", //bool
+   "message":"message" // string
+}
+```
+
 ## Generate Mobile Insight for Version 2 of the SDK
 
-Returns a Json String contain //{ "mobileInsightsOverviewKey": 6}
+Returns a PericulumResponse
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -61,8 +72,9 @@ Returns a Json String contain //{ "mobileInsightsOverviewKey": 6}
 | `phoneNumber` | `String` | **required** |
 | `bvn` | `String` | **required** |
 
-```dart 
-var flutterPericulum =
+```dart
+//return type of PericulumResponse 
+PericulumResponse flutterPericulum =
           await FlutterPericulum.generateMobileInsightV2(
         publicKey: 'publicKey',
         bvn: '1234567890123',
@@ -73,7 +85,7 @@ var flutterPericulum =
 ## Update an existing Mobile Analysis for Version 2 of the SDK
 
 
-Returns a Json Object carrying ```OverviewKey``mobileInsightsOverviewKey 
+Returns a Json Object carrying ```PericulumResponse``mobileInsightsOverviewKey 
 ###### 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -82,7 +94,8 @@ Returns a Json Object carrying ```OverviewKey``mobileInsightsOverviewKey
 | `bvn` | `String` | **optional** |
 
 ```dart
-var flutterPericulum =
+//return type of PericulumResponse 
+PericulumResponse flutterPericulum =
           await FlutterPericulum.patchMobileAnalysisV2(
         publicKey: 'publickKey',
         overviewkey: 'overviewKey',
