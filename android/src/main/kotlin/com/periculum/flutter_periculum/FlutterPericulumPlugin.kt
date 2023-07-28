@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.periculum.flutter_periculum.models.requests.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -94,131 +95,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         phoneNumber = args.get("phoneNumber").toString()
                         bvn = args.get("bvn").toString()
 
-                        if (statementName == null || statementName == "null") {
-                            statementName = getStatementName().toString()
-                        }
-                    } else {
-                        statementName = getStatementName().toString()
-                    }
 
-
-                    var customer = Customer(phoneNumber, bvn)
-                    var mymetadata = MetaData(customer)
-                    var device = async { getDeviceDetails() }
-                    var smses = async { getDebitSMSes() }
-
-                    var mydevice = device.await()
-                    var mysms = smses.await()
-
-                    fusedLocationProviderClient =
-                        LocationServices.getFusedLocationProviderClient(myplugin.context)
-                    fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
-                        var location: Location = locTask.result
-
-                        if (location != null) {
-                    val args = call.arguments as? HashMap<String, String>
-                            var latitude = locTask.result.latitude
-                            var longitude = locTask.result.longitude
-                            var accuracy = locTask.result.accuracy.toDouble()
-                            var speed = locTask.result.speed.toDouble()
-                            var bearing = locTask.result.bearing.toDouble()
-                            var altitude = locTask.result.altitude
-                            var time = getStatementName()
-
-                            myLocation = LocationDetails(
-                                accuracy,
-                                altitude,
-                                bearing,
-                                latitude,
-                                longitude,
-                                "fused",
-                                speed,
-                                time)
-
-                            val gson = Gson()
-
-                            periculum =
-                                Periculum(
-                                    publicKey,
-                                    statementName,
-                                    mydevice,
-                                    mysms,
-                                    mymetadata,
-                                    myLocation)
-
-                            val jsonInString: String = gson.toJson(periculum)
-                            if (args != null) {
-                                
-                                val endpoint = args.get("endpoint").toString();
-
-                                val url = "$BASE_URL$endpoint"
-
-                                val JSON = "application/json; charset=utf-8".toMediaType()
-
-                                var body: RequestBody = RequestBody.create(JSON, jsonInString)
-
-                                val request = Request.Builder()
-                                    .post(body)
-                                    .url(url)
-                                    .build()
-                                val client = OkHttpClient()
-                                client.newCall(request).enqueue(object : Callback {
-                                    override fun onResponse(call: Call, response: Response) {
-                                        val tm = response.body!!.string()
-                                        val statusCode = response.code
-                                        if(statusCode == 401){
-                                            result.success("Invalid public key.");
-                                        }else if(statusCode == 200){
-                                            result.success(tm)
-                                        }else if(statusCode == 400){
-                                            result.success("There is already an Insights with the unique id provided. Please use the PATCH endpoint to update the existing Insights.")
-                                        }else{
-                                            result.success(response.code.toString())
-                                        }
-                                    }
-
-                                    override fun onFailure(call: Call, e: IOException) {
-                                        val error = e.message;
-                                        result.success("{\"title\": \"${error}\"}")
-                                    }
-                                })
-                            } 
-
-                        } else {
-                            result.success("{\"title\": \"Unable to get location details\"}")
-                        }
-                    }
-
-                } else {
-                    result.success("{\"title\": \"Unable to get permission\"}")
-                }
-            }
-        }
-        else if (call.method == "patchMobileAnalysis") {
-            GlobalScope.launch(Dispatchers.IO) {
-                if (!isLocationAndReadSMSPermissionGranted()) {
-                    async { requestLocationAndReadSMSPermissions() }
-                }
-
-                var pCheck = async { isLocationAndReadSMSPermissionGranted() }
-
-                if (pCheck.await()) {
-
-                    checkPermissions();
-
-                    val args = call.arguments as? HashMap<String, String>
-                    var statementName: String = ""
-                    var phoneNumber: String = ""
-                    var bvn: String = ""
-                    var publicKey: String = ""
-                    var overviewkey: String = ""
-
-                    if (args != null) {
-                        statementName = getStatementName().toString() 
-                        overviewkey = args.get("overviewkey").toString()
-                        publicKey = args.get("publicKey").toString()
-                        phoneNumber = args.get("phoneNumber").toString()
-                        bvn = args.get("bvn").toString()
 
                         if (statementName == null || statementName == "null") {
                             statementName = getStatementName().toString()
@@ -272,42 +149,10 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                                     mymetadata,
                                     myLocation)
 
-                            val jsonInString: String = gson.toJson(periculum)
-                            if (args != null) {
-                                
-                                val overviewkey = args.get("overviewkey").toString();
+                            var jsonInString: String? = gson.toJson(periculum)
+                            result.success(jsonInString)
 
-                                val url = "$BASE_URL/mobile/insights/v2/$overviewkey"
-
-                                val JSON = "application/json; charset=utf-8".toMediaType()
-
-                                var body: RequestBody = RequestBody.create(JSON, jsonInString)
-
-                                val request = Request.Builder()
-                                    .patch(body)
-                                    .url(url)
-                                    .build()
-                                val client = OkHttpClient()
-                                client.newCall(request).enqueue(object : Callback {
-                                    override fun onResponse(call: Call, response: Response) {
-                                        val tm = response.body!!.string()
-                                        val statusCode = response.code
-                                         if(statusCode == 401){
-                                            result.success("Invalid public key.");
-                                        }else if(statusCode == 400){
-                                            result.success("The value '{overviewkey}' is not valid.");
-                                        }else{
-                                            result.success(tm)
-                                        }
-                                      
-                                    }
-
-                                    override fun onFailure(call: Call, e: IOException) {
-                                        val error = e.message;
-                                        result.success("{\"title\": \"${error}\"}")
-                                    }
-                                })
-                            } 
+                            jsonInString = null
 
                         } else {
                             result.success("{\"title\": \"Unable to get location details\"}")
@@ -318,9 +163,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     result.success("{\"title\": \"Unable to get permission\"}")
                 }
             }
-
-        } else {
-            result.notImplemented()
         }
     }
 
@@ -489,7 +331,8 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
         myNetwork = MyNetwork(carrierName, ipAddress, macAddress)
 
-        myDevice = Device(device,
+        myDevice = Device(
+            device,
             deviceId,
             model,
             firstInstallTime,
@@ -514,6 +357,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     suspend fun getDebitSMSes(): MainSMS {
+        smslist = mutableListOf<SMS>()
         this.smsCount = 0
         val dateArgs: Long = Date(System.currentTimeMillis() - 180L * 24 * 3600 * 1000).getTime()
         var selectionArgs = arrayOf("" + dateArgs)
@@ -618,7 +462,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
         mySmses = MainSMS(this.smslist, this.smsCount)
 
-        Log.d("SMS COUNT", this.smsCount.toString())
+//        Log.d("SMS COUNT", this.smsCount.toString())
         cursor.close()
 
         return mySmses
@@ -665,6 +509,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+        channel.setMethodCallHandler(null)
     }
 }

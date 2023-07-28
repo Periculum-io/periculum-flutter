@@ -10,7 +10,7 @@ class OverviewKey {
     this.mobileInsightsOverviewKey,
   });
 
-  int? mobileInsightsOverviewKey;
+  num? mobileInsightsOverviewKey;
 
   factory OverviewKey.fromJson(Map<String, dynamic> json) => OverviewKey(
         mobileInsightsOverviewKey: json["mobileInsightsOverviewKey"],
