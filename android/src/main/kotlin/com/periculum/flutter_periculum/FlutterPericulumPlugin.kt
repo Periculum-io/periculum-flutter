@@ -6,7 +6,6 @@ import android.content.Context.BATTERY_SERVICE
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.location.Location
 import android.net.wifi.WifiManager
 import android.os.BatteryManager
 import android.os.Build
@@ -20,8 +19,6 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.periculum.flutter_periculum.models.requests.*
@@ -49,13 +46,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var channel: MethodChannel
     lateinit var myplugin: FlutterPericulumPlugin
     lateinit var context: Activity
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val BASE_URL: String = "https://api.insights-periculum.com"
 
     lateinit var periculum: Periculum
     var smsCount = 0
 
-    lateinit var myLocation: LocationDetails
     lateinit var camera: Camera
     lateinit var myNetwork: MyNetwork
     lateinit var myDevice: Device
@@ -73,11 +68,11 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       
        if (call.method == "generateMobileDataAnalysis") {
             GlobalScope.launch(Dispatchers.IO) {
-                if (!isLocationAndReadSMSPermissionGranted()) {
-                    async { requestLocationAndReadSMSPermissions() }
+                if (!isReadSMSPermissionGranted()) {
+                    async { requestReadSMSPermissions() }
                 }
 
-                var pCheck = async { isLocationAndReadSMSPermissionGranted() }
+                var pCheck = async { isReadSMSPermissionGranted() }
 
                 if (pCheck.await()) {
 
@@ -113,30 +108,12 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     var mydevice = device.await()
                     var mysms = smses.await()
 
-                    fusedLocationProviderClient =
-                        LocationServices.getFusedLocationProviderClient(myplugin.context)
-                    fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
-                        var location: Location = locTask.result
 
-                        if (location != null) {
-                    val args = call.arguments as? HashMap<String, String>
-                            var latitude = locTask.result.latitude
-                            var longitude = locTask.result.longitude
-                            var accuracy = locTask.result.accuracy.toDouble()
-                            var speed = locTask.result.speed.toDouble()
-                            var bearing = locTask.result.bearing.toDouble()
-                            var altitude = locTask.result.altitude
+
+
+
                             var time = getStatementName()
 
-                            myLocation = LocationDetails(
-                                accuracy,
-                                altitude,
-                                bearing,
-                                latitude,
-                                longitude,
-                                "fused",
-                                speed,
-                                time)
 
                             val gson = Gson()
 
@@ -147,19 +124,17 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                                     mydevice,
                                     mysms,
                                     mymetadata,
-                                    myLocation)
+                                    )
 
                             var jsonInString: String? = gson.toJson(periculum)
                             result.success(jsonInString)
 
                             jsonInString = null
 
-                        } else {
-                            result.success("{\"title\": \"Unable to get location details\"}")
-                        }
+
                     }
 
-                } else {
+                else {
                     result.success("{\"title\": \"Unable to get permission\"}")
                 }
             }
@@ -170,14 +145,8 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         channel.setMethodCallHandler(null)
     }
 
-    suspend fun isLocationAndReadSMSPermissionGranted(): Boolean {
-        return if (ActivityCompat.checkSelfPermission(
-                myplugin.context,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                myplugin.context,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+    suspend fun isReadSMSPermissionGranted(): Boolean {
+        return if ( ActivityCompat.checkSelfPermission(
                 myplugin.context,
                 android.Manifest.permission.READ_SMS
             ) != PackageManager.PERMISSION_GRANTED
@@ -185,8 +154,6 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             ActivityCompat.requestPermissions(
                 myplugin.context,
                 arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
                     android.Manifest.permission.READ_SMS
                 ),
                 44
@@ -200,18 +167,12 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     suspend fun checkPermissions() {
         when {
             ContextCompat.checkSelfPermission(myplugin.context.applicationContext,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                myplugin.context.applicationContext,
-                android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                myplugin.context.applicationContext,
                 android.Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED -> {
             }
 
             else -> ActivityCompat.requestPermissions(
                 myplugin.context,
                 arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
                     android.Manifest.permission.READ_SMS
                 ),
                 44
@@ -219,73 +180,16 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         }
     }
 
-    suspend fun requestLocationAndReadSMSPermissions() {
+    suspend fun requestReadSMSPermissions() {
         ActivityCompat.requestPermissions(
             myplugin.context,
             arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
                 android.Manifest.permission.READ_SMS
             ),
             44
         )
     }
 
-    suspend fun getLocationDetails(): LocationDetails {
-        var latitude = 0.0
-        var longitude = 0.0
-        var accuracy = 0.0
-        var speed = 0.0
-        var bearing = 0.0
-        var provider: String = "fused"
-        var altitude = 0.0
-        var time = getStatementName()
-
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(myplugin.context)
-        fusedLocationProviderClient.lastLocation.addOnCompleteListener { locTask ->
-            var location: Location = locTask.result
-
-            if (location != null) {
-                latitude = locTask.result.latitude
-                longitude = locTask.result.longitude
-                accuracy = locTask.result.accuracy.toDouble()
-                speed = locTask.result.speed.toDouble()
-                bearing = locTask.result.bearing.toDouble()
-                altitude = locTask.result.altitude
-                time = getStatementName()
-
-                myLocation = LocationDetails(
-                    accuracy,
-                    altitude,
-                    bearing,
-                    latitude,
-                    longitude,
-                    provider,
-                    speed,
-                    time)
-
-                return@addOnCompleteListener
-                Log.d("Location Here", myLocation.toString())
-
-            } else {
-                myLocation = LocationDetails(
-                    accuracy,
-                    altitude,
-                    bearing,
-                    latitude,
-                    longitude,
-                    provider,
-                    speed,
-                    time)
-
-                return@addOnCompleteListener
-                Log.d("Location There", myLocation.toString())
-            }
-        }
-        Log.d("Location Here2", myLocation.toString())
-        return myLocation
-    }
 
     suspend fun getDeviceDetails(): Device {
         var versionCode = Build.VERSION.RELEASE
