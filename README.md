@@ -128,7 +128,7 @@ PericulumResponse flutterPericulum =
 Minimum Android SDK: `Periculum requires a minimum API level of 21.`
 
 ## Info
-For this plugin to work, you must have a Periculum account and you'll also need to use your merchant Id and secret key to generate a token from the Periculum API.
+For this plugin to work, you must have a Periculum account and you'll also need to use your Client Id and secret key to generate a token from the Periculum API.
 
 
 ## Getting Started
