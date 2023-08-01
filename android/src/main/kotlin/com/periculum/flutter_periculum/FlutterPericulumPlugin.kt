@@ -1,4 +1,4 @@
-package com.periculum.flutter_periculum
+package com.periculum.flutter_insights
 
 import android.app.Activity
 import android.content.Context
@@ -24,7 +24,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.periculum.flutter_periculum.models.requests.*
+import com.periculum.flutter_insights.models.requests.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -64,7 +64,7 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         myplugin = FlutterPericulumPlugin()
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_periculum")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_insights")
         channel.setMethodCallHandler(this)
     }
 

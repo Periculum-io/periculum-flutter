@@ -1,4 +1,4 @@
-# flutter_periculum
+# flutter_insights
 <p align="center">
     <img title="Flutterwave" height="200" src="https://www.periculum.io/wp-content/uploads/2020/11/logo1.png" width="50%"/>
 </p>
@@ -10,20 +10,18 @@ This plugin allows Flutter apps to generate Mobile Data Analysis and Affordabili
 Android
 
 ## Installation and usage
-1. Add the latest version of the plugin to your pubspec.yaml (and run `pub get`)
-dependencies:
-    `flutter_periculum: ^0.0.2`
+1. Add the latest version of the plugin to your pubspec.yaml (and run `pub get`) dependencies:
+
+`flutter_insights: ^0.0.2`
 
 2. Import  the plugin and use it in your flutter App.0
 
-`import 'package:flutter_periculum/flutter_periculum.dart';`
+`import 'package:flutter_insights/flutter_periculum.dart';`
 
 #### Required Permission 
-The following permission (LOCATION, SMS and WIFI) are required to be requested in the AndroidManifest.xml from the Android device before calling method of the package. 
+The following permission (SMS and WIFI) are required to be requested in the AndroidManifest.xml from the Android device before calling method of the package. 
 
-```xml
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+```xml 
   <uses-permission android:name="android.permission.LOCAL_MAC_ADDRESS" />
   <uses-permission android:name="android.permission.READ_SMS" />
   <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -44,7 +42,7 @@ Returns a PericulumResponse
 
 ```dart 
 var flutterPericulum =
-          await FlutterPericulum.generateMobileAnalysis(
+      await FlutterPericulum.generateMobileAnalysis(
         publicKey: 'publicKey',
         bvn: '1234567890123',
         phoneNumber: '090********',
@@ -55,10 +53,10 @@ var flutterPericulum =
 
 ```dart 
 {
-   "insightKey":"mobileInsightKey", //num
-   "statusCode":"statusCode", //num
-   "status":"status", //bool
-   "message":"message" // string
+   "insightKey":"mobileInsightKey", // num
+   "statusCode":"statusCode",       // num
+   "status":"status",               // bool
+   "message":"message"              // string
 }
 ```
 
@@ -75,7 +73,7 @@ Returns a PericulumResponse
 ```dart
 //return type of PericulumResponse 
 PericulumResponse flutterPericulum =
-          await FlutterPericulum.generateMobileInsightV2(
+      await FlutterPericulum.generateMobileInsightV2(
         publicKey: 'publicKey',
         bvn: '1234567890123',
         phoneNumber: '090********',
@@ -96,7 +94,7 @@ Returns a Json Object carrying ```PericulumResponse``mobileInsightsOverviewKey
 ```dart
 //return type of PericulumResponse 
 PericulumResponse flutterPericulum =
-          await FlutterPericulum.patchMobileAnalysisV2(
+      await FlutterPericulum.patchMobileAnalysisV2(
         publicKey: 'publickKey',
         overviewkey: 'overviewKey',
         bvn: '12345678908765',
@@ -109,7 +107,7 @@ PericulumResponse flutterPericulum =
   onPressed: () async {
     try {
       var flutterPericulum =
-          await FlutterPericulum.generateMobileInsightV2(
+      await FlutterPericulum.generateMobileInsightV2(
         publicKey: 'nucleusis123',
         bvn: '344983985053053',
         phoneNumber: '09098983930',
@@ -125,6 +123,7 @@ PericulumResponse flutterPericulum =
 ),
 ```
 ...
+
 ## Compatibility
 Minimum Android SDK: `Periculum requires a minimum API level of 21.`
 
