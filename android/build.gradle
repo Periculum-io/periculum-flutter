@@ -1,4 +1,4 @@
-group 'com.periculum.flutter_periculum'
+group 'com.periculum.flutter_insights'
 version '1.0-SNAPSHOT'
 
 buildscript {

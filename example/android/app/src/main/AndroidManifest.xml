@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.periculum.flutter_periculum_example">
+    package="com.periculum.flutter_insights_example">
 
    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
    <application
-        android:label="flutter_periculum_example"
+        android:label="flutter_insights_example"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

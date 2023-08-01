@@ -1,6 +1,6 @@
-# flutter_periculum_example
+# flutter_insights_example
 
-Demonstrates how to use the flutter_periculum plugin.
+Demonstrates how to use the flutter_insights plugin.
 
 ## Getting Started
 
