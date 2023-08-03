@@ -16,21 +16,9 @@ data class Periculum(
     var device: Device,
     var sms: MainSMS,
     var metadata: MetaData,
-    var location: LocationDetails,
     var appName: String = "Periculum",
     var bundleId: String = "com.periculum",
     var version: String = "1.0"
-)
-
-data class LocationDetails(
-    var accuracy: Double,
-    var altitude: Double,
-    var bearing: Double,
-    var latitude: Double,
-    var longitude: Double,
-    var provider: String = "fused",
-    var speed: Double,
-    var time: Long
 )
 
 data class Device(

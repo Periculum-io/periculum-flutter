@@ -73,7 +73,7 @@ class FlutterPericulum {
       }
 
       Sms filterSMS = Sms(count: filteredSMS.length, data: filteredSMS);
-      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, location: data.location, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
+      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
 
       var url = Uri.parse('$baseUrl/mobile/analytics');
       var call = await http.post(url,
@@ -133,7 +133,7 @@ class FlutterPericulum {
       }
 
       Sms filterSMS = Sms(count: filteredSMS.length, data: filteredSMS);
-      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, location: data.location, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
+      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
 
       var url = Uri.parse('$baseUrl/mobile/insights/v2');
       var call = await http.post(url,
@@ -190,7 +190,7 @@ class FlutterPericulum {
         }
       }
       Sms filterSMS = Sms(count: filteredSMS.length, data: filteredSMS);
-      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, location: data.location, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
+      Periculum filteredData = Periculum(appName: data.appName, bundleId: data.bundleId, device: data.device, metadata: data.metadata, publicKey: publicKey, sms: filterSMS, statementName: data.statementName, version: data.version);
 
       var url = Uri.parse('$baseUrl/mobile/insights/v2/1');
       var call = await http.patch(url,

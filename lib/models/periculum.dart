@@ -12,7 +12,6 @@ class Periculum {
   String appName;
   String bundleId;
   Device device;
-  Location location;
   Metadata metadata;
   String publicKey;
   String? overviewkey;
@@ -24,7 +23,6 @@ class Periculum {
     required this.appName,
     required this.bundleId,
     required this.device,
-    required this.location,
     required this.metadata,
     required this.publicKey,
     this.overviewkey,
@@ -37,7 +35,6 @@ class Periculum {
     appName: json["appName"],
     bundleId: json["bundleId"],
     device: Device.fromJson(json["device"]),
-    location: Location.fromJson(json["location"]),
     metadata: Metadata.fromJson(json["metadata"]),
     publicKey: json["publicKey"],
     overviewkey: json["overviewkey"],
@@ -50,7 +47,6 @@ class Periculum {
     "appName": appName,
     "bundleId": bundleId,
     "device": device.toJson(),
-    "location": location.toJson(),
     "metadata": metadata.toJson(),
     "publicKey": publicKey,
     "overviewkey": overviewkey,
@@ -181,50 +177,6 @@ class Network {
     "carrier": carrier,
     "ip": ip,
     "macAddress": macAddress,
-  };
-}
-
-class Location {
-  num accuracy;
-  num altitude;
-  num bearing;
-  double latitude;
-  double longitude;
-  String provider;
-  num speed;
-  num time;
-
-  Location({
-    required this.accuracy,
-    required this.altitude,
-    required this.bearing,
-    required this.latitude,
-    required this.longitude,
-    required this.provider,
-    required this.speed,
-    required this.time,
-  });
-
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-    accuracy: json["accuracy"],
-    altitude: json["altitude"],
-    bearing: json["bearing"],
-    latitude: json["latitude"]?.toDouble(),
-    longitude: json["longitude"]?.toDouble(),
-    provider: json["provider"],
-    speed: json["speed"],
-    time: json["time"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "accuracy": accuracy,
-    "altitude": altitude,
-    "bearing": bearing,
-    "latitude": latitude,
-    "longitude": longitude,
-    "provider": provider,
-    "speed": speed,
-    "time": time,
   };
 }
 
