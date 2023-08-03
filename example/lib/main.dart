@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_insights/flutter_periculum.dart';
+import 'package:flutter_insights/flutter_insights.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                               await FlutterPericulum.generateMobileAnalysisV1(
-                                publicKey: 'insert publicKey',
+                                publicKey: 'periculumprod123',
                                 bvn: '344983985053053',
                                 phoneNumber: '09098983930',
                               );
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.generateMobileInsightV2(
-                              publicKey: 'insert publicKey',
+                              publicKey: 'periculumprod123',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
                             );
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
                           try {
                             var flutterPericulum =
                                 await FlutterPericulum.patchMobileAnalysisV2(
-                              publicKey: 'insert publicKey',
+                              publicKey: 'periculumprod123',
                               overviewkey: '32',
                               bvn: '344983985053053',
                               phoneNumber: '09098983930',
