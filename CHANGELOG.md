@@ -27,3 +27,9 @@ Update the package with new features:
 * V2 generates mobile statement analytics
 * V1 endpoint returns statement analytics key which can be sent to backend server. The backend server can call Insights with client_credentials flow for the full details.
 * V2 endpoint returns mobile statement analytics overview key which can be sent to backend server. The backend server can call Insights with client_credentials flow for all of the V2 data.
+
+## 2.0.1 - 2022-07-27
+
+Update the package with new features:
+* Removed the need for location permission
+* Push only transactional SMS to insights

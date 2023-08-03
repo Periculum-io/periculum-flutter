@@ -5,16 +5,16 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_periculum/models/overview_key.dart';
-import 'package:flutter_periculum/models/periculum.dart';
-import 'package:flutter_periculum/models/sender_address.dart';
+import 'package:flutter_insights/models/overview_key.dart';
+import 'package:flutter_insights/models/periculum.dart';
+import 'package:flutter_insights/models/sender_address.dart';
 import 'package:http/http.dart' as http;
 
 import 'models/response.dart';
 
 
 class FlutterPericulum {
-  static const MethodChannel _channel = MethodChannel('flutter_periculum');
+  static const MethodChannel _channel = MethodChannel('flutter_insights');
   static String baseUrl = 'https://api.insights-periculum.com';
 
   static void sendDataToNative(String data) {
@@ -26,7 +26,7 @@ class FlutterPericulum {
   }
 
 
-   static Future<List<SenderAddress>> getSenderAddress({required String publicKey})async {
+  static Future<List<SenderAddress>> getSenderAddress({required String publicKey})async {
     try{
       var url = Uri.parse('$baseUrl/mobile/sms-address-list');
       var response = await http.post(url,
@@ -45,20 +45,20 @@ class FlutterPericulum {
   }
 
   static Future<PericulumResponse?> generateMobileAnalysisV1({
-    required String publicKey,
-    required String phoneNumber,
-    required String bvn,
-  }) async {
+      required String publicKey,
+      required String phoneNumber,
+      required String bvn,
+    }) async {
 
     Periculum? data;
     try {
       final senderAddress = await getSenderAddress(publicKey: publicKey);
       final String response =
-          await _channel.invokeMethod('generateMobileDataAnalysis', {
-        "publicKey": publicKey,
-        'phoneNumber': phoneNumber,
-      });
-      data = periculumFromJson(response.toString());
+        await _channel.invokeMethod('generateMobileDataAnalysis', {
+          "publicKey": publicKey,
+          'phoneNumber': phoneNumber,
+        });
+        data = periculumFromJson(response.toString());
 
       List<Datum> unfilteredSMS= [];
       List<Datum> filteredSMS= [];
@@ -106,18 +106,18 @@ class FlutterPericulum {
   }
 
   static Future<PericulumResponse?> generateMobileInsightV2({
-    required String publicKey,
-    String? phoneNumber,
-    String? bvn,
-  }) async {
+      required String publicKey,
+      String? phoneNumber,
+      String? bvn,
+    }) async {
     try {
       final senderAddress = await getSenderAddress(publicKey: publicKey);
       final String response =
-          await _channel.invokeMethod('generateMobileDataAnalysis', {
-        "publicKey": publicKey,
-        'phoneNumber': phoneNumber,
-        "bvn": bvn,
-      });
+        await _channel.invokeMethod('generateMobileDataAnalysis', {
+          "publicKey": publicKey,
+          'phoneNumber': phoneNumber,
+          "bvn": bvn,
+        });
       Periculum data = periculumFromJson(response.toString());
 
       List<Datum> unfilteredSMS= [];
@@ -137,10 +137,10 @@ class FlutterPericulum {
 
       var url = Uri.parse('$baseUrl/mobile/insights/v2');
       var call = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(filteredData.toJson()));
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(filteredData.toJson()));
 
       
       switch(call.statusCode){
@@ -163,20 +163,20 @@ class FlutterPericulum {
   }
 
   static Future<PericulumResponse?> patchMobileAnalysisV2({
-    required String publicKey,
-    required String overviewkey,
-    String? phoneNumber,
-    String? bvn,
-  }) async {
+      required String publicKey,
+      required String overviewkey,
+      String? phoneNumber,
+      String? bvn,
+    }) async {
     try {
       final senderAddress = await getSenderAddress(publicKey: publicKey);
       final  response =
-          await _channel.invokeMethod('generateMobileDataAnalysis', {
-        "publicKey": publicKey,
-        "overviewkey": overviewkey,
-        'phoneNumber': phoneNumber,
-        "bvn": bvn,
-      });
+        await _channel.invokeMethod('generateMobileDataAnalysis', {
+          "publicKey": publicKey,
+          "overviewkey": overviewkey,
+          'phoneNumber': phoneNumber,
+          "bvn": bvn,
+        });
       Periculum data = periculumFromJson(response.toString());
 
       List<Datum> unfilteredSMS= [];
@@ -194,10 +194,10 @@ class FlutterPericulum {
 
       var url = Uri.parse('$baseUrl/mobile/insights/v2/1');
       var call = await http.patch(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(filteredData.toJson()));
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(filteredData.toJson()));
 
 
       

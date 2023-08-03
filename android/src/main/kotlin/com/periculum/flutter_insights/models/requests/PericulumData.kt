@@ -1,4 +1,4 @@
-package com.periculum.flutter_periculum.models.requests
+package com.periculum.flutter_insights.models.requests
 
 
 data class Customer(

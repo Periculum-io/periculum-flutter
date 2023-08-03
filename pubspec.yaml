@@ -1,16 +1,16 @@
-name: flutter_periculum
-description: Periculum Insight Plugin
-version: 2.0.0
+name: flutter_insights
+description: This Insights plugin allows Flutter apps to generate Mobile Data Analysis and Affordability Analysis.
+version: 2.0.2
 homepage: https://github.com/Periculum-io/periculum-flutter
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.16.0 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.13.4
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -26,5 +26,5 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.periculum.flutter_periculum
+        package: com.periculum.flutter_insights
         pluginClass: FlutterPericulumPlugin
