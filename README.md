@@ -1,6 +1,6 @@
 # flutter_insights
 <p align="center">
-    <img title="Flutterwave" height="200" src="https://www.periculum.io/wp-content/uploads/2020/11/logo1.png" width="50%"/>
+    <img title="Flutterwave" height="200" src="https://uploads-ssl.webflow.com/63234398452c1a657e1a1678/632357e9a5bf09449e2ad41c_periculum-logo-light.svg" width="50%"/>
 </p>
 
 Periculum Insight Plugin (Flutter)
@@ -110,7 +110,7 @@ PericulumResponse flutterPericulum =
       await FlutterPericulum.generateMobileInsightV2(
         publicKey: 'nucleusis123',
         bvn: '344983985053053',
-        phoneNumber: '09098983930',
+        phoneNumber: '09098983930'),
   
       setState(() {
         responseOutput = flutterPericulum;
@@ -128,8 +128,42 @@ PericulumResponse flutterPericulum =
 Minimum Android SDK: `Periculum requires a minimum API level of 21.`
 
 ## Info
-For this plugin to work, you must have a Periculum account and you'll also need to use your Client Id and secret key to generate a token from the Periculum API.
+For this plugin to work, you must have a Periculum [account](https://register.insights-periculum.com) and you'll also need to use your Client Id and secret key to generate a token from the Periculum API see [docs](https://insights-periculum.readme.io/reference/authentication-request) here.
 
+## SDK User Flow
+```
+   +-----------------------------------------------------+
+   |                User Flow Diagram                    |
+   +-----------------------------------------------------+
+   |                                                     |
+   v                                                     |
+   [1]    Merchant Application requests permission      |
+   |      from client device                             |
+   |                                                     |
+   |                                                     |
+   v                                                     |
+   [2]    Merchant Application calls backend server to   |
+   |      generate access token from the info obtained   |
+   |      in step 1                                      |
+   |                                                     |
+   |                                                     |
+   v                                                     |
+   [3]    Data is pulled from customer device, and the   |
+   |      Merchant Application calls SDK method to       |
+   |      process it                                     |
+   |                                                     |
+   |                                                     |
+   v                                                     |
+   [4]    SDK calls Insights API to generate mobile     |
+   |      insights from the extracted data              |
+   |                                                     |
+   |                                                     |
+   v                                                     |
+   [End]  End of the user flow                            |
+   |                                                     |
+   +-----------------------------------------------------+
+
+```
 
 ## Getting Started
 For help getting started with Flutter, view our
