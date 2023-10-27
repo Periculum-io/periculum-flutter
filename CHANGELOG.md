@@ -33,3 +33,7 @@ Update the package with new features:
 Update the package with new features:
 * Removed the need for location permission
 * Push only transactional SMS to insights
+
+## 2.0.3 - 2023-10-27
+
+Added implementation for onDetachedFromActivityForConfigChanges

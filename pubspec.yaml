@@ -1,6 +1,6 @@
 name: flutter_insights
 description: This Insights plugin allows Flutter apps to generate Mobile Data Analysis and Affordability Analysis.
-version: 2.0.2
+version: 2.0.3
 homepage: https://github.com/Periculum-io/periculum-flutter
 
 environment:
