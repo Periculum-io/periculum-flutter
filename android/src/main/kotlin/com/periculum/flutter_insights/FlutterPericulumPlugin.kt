@@ -405,11 +405,12 @@ class FlutterPericulumPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+        channel.setMethodCallHandler(null)
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+        channel.setMethodCallHandler(this)
+
     }
 
     override fun onDetachedFromActivity() {
