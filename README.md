@@ -165,6 +165,11 @@ For this plugin to work, you must have a Periculum [account](https://register.in
 
 ```
 
+# flow Diagram
+![SDK Flow](<Mobile SDK V1-SDK mini flow.drawio.png>)
+
+
+
 ## Getting Started
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
